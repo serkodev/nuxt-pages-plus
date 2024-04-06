@@ -4,6 +4,10 @@ import { extractNamedRoutePath } from '../utils'
 import { type NamedRouter, createNamedRouter } from './named-router'
 import { defineNuxtPlugin, useRouter } from '#app'
 
+interface NamedPagesPageMeta {
+  ignore?: boolean
+}
+
 export default defineNuxtPlugin(async () => {
   const router = useRouter()
 
@@ -11,6 +15,9 @@ export default defineNuxtPlugin(async () => {
     console.log('global router (before)', router.getRoutes())
 
   const namedRoutes = router.getRoutes().reduce((acc, route) => {
+    if ((route.meta as { namedPages?: NamedPagesPageMeta })?.namedPages?.ignore)
+      return acc
+
     const namedRoutePath = extractNamedRoutePath(route.path)
     if (namedRoutePath) {
       ;(acc[namedRoutePath.name] ??= []).push({
