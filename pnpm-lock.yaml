@@ -11,6 +11,9 @@ importers:
       '@nuxt/kit':
         specifier: ^3.11.2
         version: 3.11.2(rollup@3.29.4)
+      ufo:
+        specifier: ^1.5.3
+        version: 1.5.3
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.4.4
@@ -58,6 +61,18 @@ importers:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
+  examples/custom-separator:
+    dependencies:
+      nuxt:
+        specifier: ^3.11.2
+        version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
+
+  examples/ignore-named-page:
+    dependencies:
+      nuxt:
+        specifier: ^3.11.2
+        version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
+
   examples/named-views:
     dependencies:
       nuxt:
@@ -71,12 +86,6 @@ importers:
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
   examples/sidebar-without-layout:
-    dependencies:
-      nuxt:
-        specifier: ^3.11.2
-        version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
-
-  playground:
     dependencies:
       nuxt:
         specifier: ^3.11.2
@@ -6824,7 +6833,7 @@ packages:
       acorn: 8.11.3
       pathe: 1.1.2
       pkg-types: 1.0.3
-      ufo: 1.4.0
+      ufo: 1.5.3
 
   /mlly@1.6.1:
     resolution: {integrity: sha512-vLgaHvaeunuOXHSmEbZ9izxPx3USsk8KCQ8iC+aTlp5sKRSoZvwhHh5L9VbKSaVC6sJDqbyohIS76E2VmHIPAA==}
@@ -7312,7 +7321,7 @@ packages:
       consola: 3.2.3
       execa: 8.0.1
       pathe: 1.1.2
-      ufo: 1.4.0
+      ufo: 1.5.3
 
   /object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
@@ -9355,9 +9364,6 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /ufo@1.4.0:
-    resolution: {integrity: sha512-Hhy+BhRBleFjpJ2vchUNN40qgkh0366FWJGqVLYBHev0vpHTrXSA0ryT+74UiW6KWsldNurQMKGqCm1M2zBciQ==}
-
   /ufo@1.5.3:
     resolution: {integrity: sha512-Y7HYmWaFwPUmkoQCUIAYpKqkOf+SbVj/2fJJZ4RJMCfZp0rTGwRbzQD+HghfnhKOjL9E01okqz+ncJskGYfBNw==}
 
@@ -9668,9 +9674,9 @@ packages:
     resolution: {integrity: sha512-nC5q0DnPEPVURPhfPQLahhSTnemVtPzdx7ofiRxXpOB2SYnb3MfdU3DVGyJdS8Lx+tBWeAePO8BfU/3EgksM7Q==}
     hasBin: true
     dependencies:
-      '@babel/core': 7.23.9
+      '@babel/core': 7.24.4
       '@babel/standalone': 7.23.10
-      '@babel/types': 7.23.9
+      '@babel/types': 7.24.0
       defu: 6.1.4
       jiti: 1.21.0
       mri: 1.2.0

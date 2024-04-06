@@ -32,7 +32,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.11.2"
+    "@nuxt/kit": "^3.11.2",
+    "ufo": "^1.5.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.4.4",

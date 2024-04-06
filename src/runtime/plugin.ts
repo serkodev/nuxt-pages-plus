@@ -4,12 +4,18 @@ import { extractNamedRoutePath } from '../utils'
 import { type NamedRouter, createNamedRouter } from './named-router'
 import { defineNuxtPlugin, useRouter } from '#app'
 
+// eslint-disable-next-line ts/ban-ts-comment
+// @ts-expect-error
+import namedPagesConfig from '#build/named-pages-config.mjs'
+
 interface NamedPagesPageMeta {
   ignore?: boolean
 }
 
 export default defineNuxtPlugin(async () => {
   const router = useRouter()
+
+  const { separator } = namedPagesConfig
 
   if (import.meta.dev && import.meta.client)
     console.log('global router (before)', router.getRoutes())
@@ -18,7 +24,7 @@ export default defineNuxtPlugin(async () => {
     if ((route.meta as { namedPages?: NamedPagesPageMeta })?.namedPages?.ignore)
       return acc
 
-    const namedRoutePath = extractNamedRoutePath(route.path)
+    const namedRoutePath = extractNamedRoutePath(route.path, separator)
     if (namedRoutePath) {
       ;(acc[namedRoutePath.name] ??= []).push({
         ...route,
