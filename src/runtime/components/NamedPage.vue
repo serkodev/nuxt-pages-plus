@@ -11,9 +11,10 @@ const props = defineProps<{
 provide(viewDepthKey, 0)
 provide(NamedRouterSymbol, props.name)
 
-const route = computed(() => useNamedRouter(props.name)?.currentRoute.value)
+const router = computed(() => useNamedRouter(props.name))
+const route = computed(() => router.value?.currentRoute.value)
 </script>
 
 <template>
-  <RouterView :route="route" />
+  <RouterView v-if="router" :route="route" />
 </template>
