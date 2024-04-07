@@ -8,7 +8,7 @@ const resolvableNamedRouters = computed(() => routers.map(r => r.name))
 </script>
 
 <template>
-  <TheBoundary label="[...default].vue" color="green">
+  <TheBoundary label="$__PAGES_PATH__" color="green">
     <UContainer>
       <div class="p-4">
         <p>

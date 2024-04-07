@@ -9,7 +9,7 @@ const links = [1, 2, 3, 4, 5].map((i) => {
 </script>
 
 <template>
-  <TheBoundary label="@left/index.vue" color="orange">
+  <TheBoundary label="$__PAGES_PATH__" color="orange">
     <div class="px-2">
       <UVerticalNavigation :links="links" :ui="{ padding: 'px-3 py-3' }" />
     </div>

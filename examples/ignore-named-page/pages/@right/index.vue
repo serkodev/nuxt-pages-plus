@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <TheBoundary label="@right/index" color="purple">
+  <TheBoundary label="$__PAGES_PATH__" color="purple">
     <div class="px-4">
       <h3 class="text-lg font-semibold my-4">
         @Right page

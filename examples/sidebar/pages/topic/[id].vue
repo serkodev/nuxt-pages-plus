@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <TheBoundary label="topic/[id].vue" color="green">
+  <TheBoundary label="$__PAGES_PATH__" color="green">
     <UContainer>
       <h1 class="text-2xl font-semibold my-4">
         Topic {{ $route.params.id }}

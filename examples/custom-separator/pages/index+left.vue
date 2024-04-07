@@ -1,5 +1,5 @@
 <template>
-  <TheBoundary label="index+left.vue" color="orange">
+  <TheBoundary label="$__PAGES_PATH__" color="orange">
     <div class="px-4">
       <h3 class="text-lg font-semibold my-4">
         Left Sidebar of Index

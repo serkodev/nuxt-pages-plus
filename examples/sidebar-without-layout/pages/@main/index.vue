@@ -1,5 +1,5 @@
 <template>
-  <TheBoundary label="@main/index.vue" color="green">
+  <TheBoundary label="$__PAGES_PATH__" color="green">
     <UContainer>
       <h1 class="text-2xl font-semibold my-4">
         Index
