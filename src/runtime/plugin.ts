@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import type { RouteRecord } from 'vue-router'
 import { extractNamedRoutePath } from '../utils'
+import type { NamedPagesOptions } from '../types'
 import { type NamedRouter, createNamedRouter } from './named-router'
 import { defineNuxtPlugin, useRouter } from '#app'
 
@@ -15,7 +16,7 @@ interface NamedPagesPageMeta {
 export default defineNuxtPlugin(async () => {
   const router = useRouter()
 
-  const { separator } = namedPagesConfig
+  const { separator, pages } = namedPagesConfig as NamedPagesOptions
 
   if (import.meta.dev && import.meta.client)
     console.log('global router (before)', router.getRoutes())
@@ -44,16 +45,8 @@ export default defineNuxtPlugin(async () => {
   // create named routers
   const namedRouters: Record<string, NamedRouter> = {}
   for (const [group, routes] of Object.entries(namedRoutes)) {
-    const namedRouter = createNamedRouter(group, routes)
+    const namedRouter = await createNamedRouter(group, routes, router, pages[group] ?? {})
     namedRouters[group] = namedRouter
-
-    // wait for loading the initial path
-    await namedRouter.tryPush(router.currentRoute.value.path, '/')
-
-    // sync named routers with the global router
-    router.afterEach((to) => {
-      namedRouter.tryPush(to.path)
-    })
 
     if (import.meta.dev && import.meta.client)
       console.log(`namedRouter[${group}]`, namedRouter.getRoutes())

@@ -1,15 +1,15 @@
 import { addComponent, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { extractNamedRoutePath } from './utils'
+import type { NamedPagesOptions } from './types'
 
-export default defineNuxtModule<{
-  separator?: string
-}>({
+export default defineNuxtModule<Partial<NamedPagesOptions>>({
   meta: {
     name: 'nuxt-named-pages',
     configKey: 'namedPages',
   },
   defaults: {
     separator: '@',
+    pages: {},
   },
   setup(resolvedOptions, nuxt) {
     const resolver = createResolver(import.meta.url)
@@ -33,19 +33,15 @@ export default defineNuxtModule<{
       return { name, from: resolver.resolve('runtime/composables') }
     }))
 
-    const separator = resolvedOptions.separator ?? '@'
-
     addTemplate({
       filename: 'named-pages-config.mjs',
-      getContents: () => `export default ${JSON.stringify({
-        separator,
-      })}`,
+      getContents: () => `export default ${JSON.stringify(resolvedOptions)}`,
     })
 
     // fix that nuxt nested route does not have a name
     nuxt.hook('pages:extend', (pages) => {
       for (const page of pages) {
-        if (extractNamedRoutePath(page.path, separator)) {
+        if (extractNamedRoutePath(page.path, resolvedOptions.separator ?? '@')) {
           if (!page.name)
             page.name = `__NAMEDPAGE__${page.path}`
         }
