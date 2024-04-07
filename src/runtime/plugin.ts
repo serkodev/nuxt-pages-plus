@@ -13,12 +13,14 @@ interface NamedPagesPageMeta {
   ignore?: boolean
 }
 
+const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_NAMED_PAGES_DEBUG
+
 export default defineNuxtPlugin(async () => {
   const router = useRouter()
 
   const { separator, pages } = namedPagesConfig as NamedPagesOptions
 
-  if (import.meta.dev && import.meta.client)
+  if (DEBUG)
     console.log('global router (before)', router.getRoutes())
 
   const namedRoutes = router.getRoutes().reduce((acc, route) => {
@@ -39,7 +41,7 @@ export default defineNuxtPlugin(async () => {
     return acc
   }, {} as Record<string, RouteRecord[]>)
 
-  if (import.meta.dev && import.meta.client)
+  if (DEBUG)
     console.log('routerGroups', namedRoutes)
 
   // create named routers
@@ -48,11 +50,11 @@ export default defineNuxtPlugin(async () => {
     const namedRouter = await createNamedRouter(group, routes, router, pages[group] ?? {})
     namedRouters[group] = namedRouter
 
-    if (import.meta.dev && import.meta.client)
+    if (DEBUG)
       console.log(`namedRouter[${group}]`, namedRouter.getRoutes())
   }
 
-  if (import.meta.dev && import.meta.client)
+  if (DEBUG)
     console.log('global router (after)', router.getRoutes())
 
   return { provide: { namedRouters } }
