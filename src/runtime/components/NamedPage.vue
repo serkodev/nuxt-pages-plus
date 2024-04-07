@@ -16,5 +16,5 @@ const route = computed(() => router.value?.currentRoute.value)
 </script>
 
 <template>
-  <RouterView v-if="router" :route="route" />
+  <RouterView v-if="router" :route="route" v-bind="$attrs" />
 </template>
