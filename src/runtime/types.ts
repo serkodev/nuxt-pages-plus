@@ -1,4 +1,4 @@
-export interface NamedPageOptions {
+export interface ParallelPageOptions {
   // default: true
   sync: boolean | 'init'
 
@@ -9,7 +9,11 @@ export interface NamedPageOptions {
   notFoundPath: string | false
 }
 
-export interface NamedPagesOptions {
+export interface PagesPlusParallelOptions {
   separator: string
-  pages: Record<string, Partial<NamedPageOptions>>
+  pages: Record<string, Partial<ParallelPageOptions>>
+}
+
+export interface PagesPlusOptions {
+  parallel: Partial<PagesPlusParallelOptions> | false
 }

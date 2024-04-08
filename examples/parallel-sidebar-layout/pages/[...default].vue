@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const routers = resolveNamedRoutersByPath(useRoute().path)
+const routers = resolveParallelRoutersByPath(useRoute().path)
 
 if (!routers.some(r => r.name === 'left'))
   showError(`Path not found: ${useRoute().path}`)
 
-const resolvableNamedRouters = computed(() => routers.map(r => r.name))
+const resolvableParallelRouters = computed(() => routers.map(r => r.name))
 </script>
 
 <template>
@@ -16,12 +16,12 @@ const resolvableNamedRouters = computed(() => routers.map(r => r.name))
       <p>
         The current router <code>{{ $route.path }}</code> is resolving by
         <code>
-          {{ resolvableNamedRouters.join(', ') }}
+          {{ resolvableParallelRouters.join(', ') }}
         </code>
-        named routers.
+        parallel routers.
       </p>
       <p class="my-2">
-        You can check the current route is resolvable by any named routers by <code>resolveNamedRoutersByPath</code> and redirect to error page if you want.
+        You can check the current route is resolvable by any parallel routers by <code>resolveParallelRoutersByPath</code> and redirect to error page if you want.
       </p>
       <p>
         <NuxtLink to="/blackhole">

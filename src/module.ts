@@ -1,25 +1,30 @@
 import { addComponent, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
-import { extractNamedRoutePath } from './runtime/utils'
-import type { NamedPagesOptions } from './runtime/types'
+import { defu } from 'defu'
+import { extractParallelRoutePath } from './runtime/utils'
+import type { PagesPlusOptions } from './runtime/types'
 
-export default defineNuxtModule<Partial<NamedPagesOptions>>({
+export default defineNuxtModule<Partial<PagesPlusOptions>>({
   meta: {
-    name: 'nuxt-named-pages',
-    configKey: 'namedPages',
-  },
-  defaults: {
-    separator: '@',
-    pages: {},
+    name: 'nuxt-pages-plus',
+    configKey: 'pagesPlus',
   },
   setup(resolvedOptions, nuxt) {
+    if (resolvedOptions?.parallel === false)
+      return
+
+    const parallel = defu(resolvedOptions.parallel, {
+      separator: '@',
+      pages: {},
+    } satisfies PagesPlusOptions['parallel'])
+
     const resolver = createResolver(import.meta.url)
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     addPlugin(resolver.resolve('./runtime/plugin'))
 
     addComponent({
-      name: 'NamedPage',
-      filePath: resolver.resolve('./runtime/components/NamedPage.vue'),
+      name: 'ParallelPage',
+      filePath: resolver.resolve('./runtime/components/ParallelPage.vue'),
       mode: 'all',
     })
 
@@ -27,23 +32,23 @@ export default defineNuxtModule<Partial<NamedPagesOptions>>({
       'useParentRouterName',
       'useParentRouter',
       'useParentRoute',
-      'useNamedRouter',
-      'resolveNamedRoutersByPath',
+      'useParallelRouter',
+      'resolveParallelRoutersByPath',
     ].map((name) => {
       return { name, from: resolver.resolve('runtime/composables') }
     }))
 
     addTemplate({
-      filename: 'named-pages-config.mjs',
-      getContents: () => `export default ${JSON.stringify(resolvedOptions)}`,
+      filename: 'parallel-pages-config.mjs',
+      getContents: () => `export default ${JSON.stringify(parallel)}`,
     })
 
     // fix that nuxt nested route does not have a name
     nuxt.hook('pages:extend', (pages) => {
       for (const page of pages) {
-        if (extractNamedRoutePath(page.path, resolvedOptions.separator ?? '@')) {
+        if (extractParallelRoutePath(page.path, parallel.separator)) {
           if (!page.name)
-            page.name = `__NAMEDPAGE__${page.path}`
+            page.name = `__PAGES_PLUS__${page.path}`
         }
       }
     })

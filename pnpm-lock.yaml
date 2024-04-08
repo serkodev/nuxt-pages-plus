@@ -64,37 +64,37 @@ importers:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
-  examples/custom-separator:
+  examples/parallel-nested:
     dependencies:
       nuxt:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
-  examples/ignore-named-page:
+  examples/parallel-page-ignore:
     dependencies:
       nuxt:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
-  examples/named-views:
+  examples/parallel-pages-options:
     dependencies:
       nuxt:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
-  examples/pages-options:
+  examples/parallel-separator:
     dependencies:
       nuxt:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
-  examples/sidebar:
+  examples/parallel-sidebar:
     dependencies:
       nuxt:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
-  examples/sidebar-without-layout:
+  examples/parallel-sidebar-layout:
     dependencies:
       nuxt:
         specifier: ^3.11.2

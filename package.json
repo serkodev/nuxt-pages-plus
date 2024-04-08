@@ -1,10 +1,10 @@
 {
-  "name": "nuxt-named-pages",
+  "name": "nuxt-pages-plus",
   "version": "1.0.0",
-  "description": "Nuxt named pages",
+  "description": "Nuxt pages plus",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/serkodev/nuxt-named-pages.git"
+    "url": "git+https://github.com/serkodev/nuxt-pages-plus.git"
   },
   "license": "MIT",
   "type": "module",
@@ -23,7 +23,7 @@
   "scripts": {
     "postinstall": "nuxt-module-build prepare",
     "prepack": "nuxt-module-build build",
-    "dev": "VITE_NAMED_PAGES_DEBUG=1 nuxi dev playground",
+    "dev": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",

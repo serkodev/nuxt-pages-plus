@@ -1,1 +1,1 @@
-# nuxt-named-pages
+# nuxt-pages-plus

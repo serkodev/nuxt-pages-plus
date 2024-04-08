@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { viewDepthKey } from 'vue-router'
-import { NamedRouterSymbol } from '../symbols'
-import { useNamedRouter } from '../composables'
+import { ParallelRouterSymbol } from '../symbols'
+import { useParallelRouter } from '../composables'
 import { computed, inject, provide, unref } from '#imports'
 
 const props = defineProps<{
   name: string
 }>()
 
-const parentRouterName = inject(NamedRouterSymbol, undefined)
+const parentRouterName = inject(ParallelRouterSymbol, undefined)
 
 const routerName = computed(() => {
   const name = unref(parentRouterName)
@@ -16,9 +16,9 @@ const routerName = computed(() => {
 })
 
 provide(viewDepthKey, 0)
-provide(NamedRouterSymbol, routerName)
+provide(ParallelRouterSymbol, routerName)
 
-const router = computed(() => useNamedRouter(routerName.value))
+const router = computed(() => useParallelRouter(routerName.value))
 const route = computed(() => router.value?.currentRoute.value)
 </script>
 

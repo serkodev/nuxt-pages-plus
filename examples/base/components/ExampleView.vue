@@ -4,7 +4,7 @@ defineProps<{
   color?: string
 }>()
 
-const routerName = useNamedRouter()?.name ?? 'global'
+const routerName = useParallelRouter()?.name ?? 'global'
 const path = useParentRoute().path
 </script>
 
