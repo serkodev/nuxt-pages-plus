@@ -1,7 +1,12 @@
 export interface NamedPageOptions {
+  // default: true
   sync: boolean | 'init'
-  defaultPath: string // '/'
-  notFoundPath: string | boolean // false
+
+  // default: '/'
+  defaultPath: string
+
+  // default: '/not-found'
+  notFoundPath: string | false
 }
 
 export interface NamedPagesOptions {
