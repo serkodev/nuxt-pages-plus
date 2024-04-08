@@ -82,6 +82,12 @@ importers:
         specifier: ^3.11.2
         version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
 
+  examples/pages-options:
+    dependencies:
+      nuxt:
+        specifier: ^3.11.2
+        version: 3.11.2(@types/node@20.12.4)(@unocss/reset@0.58.9)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@3.29.4)(typescript@5.4.2)(unocss@0.58.9)(vite@5.2.8)
+
   examples/sidebar:
     dependencies:
       nuxt:

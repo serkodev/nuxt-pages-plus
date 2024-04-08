@@ -1,8 +1,25 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   label: string
-  color: string
+  color?: string
 }>()
+
+const colors = [
+  'red',
+  'orange',
+  'green',
+  'blue',
+  'indigo',
+  'purple',
+]
+
+// base on the label content, auto caculate select color
+const color = computed(() => {
+  if (props.color)
+    return props.color
+  const index = props.label.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length
+  return colors[index]
+})
 </script>
 
 <template>
