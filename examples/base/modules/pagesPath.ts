@@ -26,7 +26,7 @@ export default defineNuxtModule({
         const pagesIndex = filePath.indexOf(targetString)
         if (pagesIndex !== -1) {
           const pagesPath = filePath.slice(pagesIndex + targetString.length)
-          return code.replace(MAGIC_COMMENT, pagesPath)
+          return code.replaceAll(MAGIC_COMMENT, pagesPath)
         }
 
         return code
