@@ -7,14 +7,15 @@ function splitNamedPath(path: string, separator: string): [string[], string[]] {
 
       // split x@y to ['x', 'y'], @y to ['', 'y']
       const sPath = p.split(separator)
-      if (sPath.length === 2) {
-        const [spath, sname] = sPath
+      if (sPath.length >= 2) {
+        const [spath, ...sname] = sPath
 
         // when input x@y get x as path, if only @y, do nothing
         if (spath.length > 0 && spath !== 'index')
           paths.push(spath)
 
-        namedPaths.push(sname)
+        // TODO: use reverse or not?
+        namedPaths.push(...sname.reverse())
       } else if (p !== 'index') {
         // more then 2 separator or no separator
         paths.push(p)

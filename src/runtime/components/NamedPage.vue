@@ -2,16 +2,23 @@
 import { viewDepthKey } from 'vue-router'
 import { NamedRouterSymbol } from '../symbols'
 import { useNamedRouter } from '../composables'
-import { computed, provide } from '#imports'
+import { computed, inject, provide, unref } from '#imports'
 
 const props = defineProps<{
   name: string
 }>()
 
-provide(viewDepthKey, 0)
-provide(NamedRouterSymbol, props.name)
+const parentRouterName = inject(NamedRouterSymbol, undefined)
 
-const router = computed(() => useNamedRouter(props.name))
+const routerName = computed(() => {
+  const name = unref(parentRouterName)
+  return name ? `${name}/${props.name}` : props.name
+})
+
+provide(viewDepthKey, 0)
+provide(NamedRouterSymbol, routerName)
+
+const router = computed(() => useNamedRouter(routerName.value))
 const route = computed(() => router.value?.currentRoute.value)
 </script>
 

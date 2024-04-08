@@ -1,7 +1,7 @@
 import type { NamedRouter } from './named-router'
 import { NamedRouterSymbol } from './symbols'
 import { useNuxtApp, useRouter } from '#app'
-import { inject } from '#imports'
+import { inject, unref } from '#imports'
 
 export function useParentRouterName() {
   return inject(NamedRouterSymbol, undefined)
@@ -19,7 +19,7 @@ export function useNamedRouters() {
   return useNuxtApp()?.$namedRouters as Record<string, NamedRouter> | undefined
 }
 
-export function useNamedRouter(name: string | undefined = useParentRouterName()) {
+export function useNamedRouter(name: string | undefined = unref(useParentRouterName())) {
   if (name)
     return useNamedRouters()?.[name]
 }

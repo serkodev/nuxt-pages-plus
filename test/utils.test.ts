@@ -38,7 +38,7 @@ describe('extractNamedRoutePath', () => {
     `)
   })
 
-  it('multiple named', () => {
+  it('nested named', () => {
     expect(extractNamedRoutePath('/foo/@side/bar/@main/baz')).toMatchInlineSnapshot(`
       {
         "name": "side/main",
@@ -47,6 +47,13 @@ describe('extractNamedRoutePath', () => {
     `)
 
     expect(extractNamedRoutePath('/foo/bar@side/baz@main')).toMatchInlineSnapshot(`
+      {
+        "name": "side/main",
+        "path": "/foo/bar/baz",
+      }
+    `)
+
+    expect(extractNamedRoutePath('/foo/bar/baz@main@side')).toMatchInlineSnapshot(`
       {
         "name": "side/main",
         "path": "/foo/bar/baz",
