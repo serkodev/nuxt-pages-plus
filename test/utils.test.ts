@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractNamedRoutePath } from '../src/utils'
+import { extractNamedRoutePath } from '../src/runtime/utils'
 
 describe('extractNamedRoutePath', () => {
   it('basic', () => {

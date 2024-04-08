@@ -1,6 +1,6 @@
 import { addComponent, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
-import { extractNamedRoutePath } from './utils'
-import type { NamedPagesOptions } from './types'
+import { extractNamedRoutePath } from './runtime/utils'
+import type { NamedPagesOptions } from './runtime/types'
 
 export default defineNuxtModule<Partial<NamedPagesOptions>>({
   meta: {

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import type { RouteRecord } from 'vue-router'
-import { extractNamedRoutePath } from '../utils'
-import type { NamedPagesOptions } from '../types'
+import { extractNamedRoutePath } from './utils'
+import type { NamedPagesOptions } from './types'
 import { type NamedRouter, createNamedRouter } from './named-router'
 import { defineNuxtPlugin, useRouter } from '#app'
 

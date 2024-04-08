@@ -1,6 +1,6 @@
 import { type RouteRecord, type Router, createMemoryHistory, createRouter, useRouter } from 'vue-router'
 import { defu } from 'defu'
-import type { NamedPageOptions } from '../types'
+import type { NamedPageOptions } from './types'
 import { NamedRouteNotFoundSymbol } from './symbols'
 
 export interface NamedRouter extends Router {
