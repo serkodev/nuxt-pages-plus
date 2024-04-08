@@ -4,9 +4,6 @@ import { extractNamedRoutePath } from './utils'
 import type { NamedPagesOptions } from './types'
 import { type NamedRouter, createNamedRouter } from './named-router'
 import { defineNuxtPlugin, useRouter } from '#app'
-
-// eslint-disable-next-line ts/ban-ts-comment
-// @ts-expect-error
 import namedPagesConfig from '#build/named-pages-config.mjs'
 
 interface NamedPagesPageMeta {

@@ -21,6 +21,7 @@
     "dist"
   ],
   "scripts": {
+    "postinstall": "nuxt-module-build prepare",
     "prepack": "nuxt-module-build build",
     "dev": "VITE_NAMED_PAGES_DEBUG=1 nuxi dev playground",
     "dev:build": "nuxi build playground",
