@@ -1,5 +1,5 @@
 <template>
-  <TheBoundary label="$__PAGES_PATH__" color="red">
+  <TheBoundary label="$__PAGES_PATH__">
     <TheNav />
     <RouterView />
   </TheBoundary>

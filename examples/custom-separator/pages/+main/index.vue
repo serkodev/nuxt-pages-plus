@@ -1,12 +1,3 @@
 <template>
-  <TheBoundary label="$__PAGES_PATH__" color="green">
-    <UContainer>
-      <h1 class="text-2xl font-semibold my-4">
-        Index
-      </h1>
-      <p>
-        This is the index page +main.
-      </p>
-    </UContainer>
-  </TheBoundary>
+  <ExampleView label="$__PAGES_PATH__" />
 </template>

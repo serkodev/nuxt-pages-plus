@@ -1,12 +1,7 @@
 <template>
-  <TheBoundary label="$__PAGES_PATH__" color="green">
-    <UContainer>
-      <h1 class="text-2xl font-semibold my-4">
-        Topic {{ useParentRoute().params.id }}
-      </h1>
-      <p>
-        This is the topic page.
-      </p>
-    </UContainer>
-  </TheBoundary>
+  <ExampleView label="$__PAGES_PATH__">
+    <div>
+      <code>useParentRoute().params.id -> {{ useParentRoute().params.id }}</code>
+    </div>
+  </ExampleView>
 </template>
