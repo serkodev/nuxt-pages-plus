@@ -55,9 +55,9 @@ export async function createParallelRouter(name: string, routes: RouteRecord[], 
   await ((shouldInitSync && sync()) || tryPush(options.defaultPath))
 
   // sync parallel routers with the global router
-  router.afterEach(() => {
+  router.beforeResolve(async (to) => {
     if (options.sync === true)
-      sync()
+      await tryPush(to.path)
   })
 
   return {
