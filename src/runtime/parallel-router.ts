@@ -2,7 +2,7 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 import type { RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
-import type { PagesPlusParallelOptions, ParallelPageOptions, ParallelRoute } from './types'
+import type { PagesPlusParallelOptions, ParallelPageOptions } from './types'
 import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath, overrideRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'

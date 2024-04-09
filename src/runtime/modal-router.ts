@@ -1,7 +1,7 @@
 import { loadRouteLocation } from 'vue-router'
 import type { HistoryState, RouteLocationRaw } from 'vue-router'
 import { defineNuxtPlugin, useRoute, useRouter } from '#app'
-import { computed, reactive, ref, toRef, toRefs, unref, watch } from '#imports'
+import { computed, ref } from '#imports'
 
 interface ModalPushRecord {
   id: number
