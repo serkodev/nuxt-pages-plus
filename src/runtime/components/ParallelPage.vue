@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { viewDepthKey } from 'vue-router'
 import { ParallelRouterSymbol } from '../symbols'
-import { useParallelRouter } from '../composables'
-import { computed, inject, provide, unref } from '#imports'
+import { computed, inject, provide, unref, useParallelRouter } from '#imports'
 
 const props = defineProps<{
   name: string

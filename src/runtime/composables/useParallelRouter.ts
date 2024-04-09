@@ -1,5 +1,5 @@
-import type { ParallelRouter } from './parallel-router'
-import { ParallelRouterSymbol } from './symbols'
+import type { ParallelRouter } from '../parallel-router'
+import { ParallelRouterSymbol } from '../symbols'
 import { useNuxtApp, useRouter } from '#app'
 import { inject, unref } from '#imports'
 
@@ -16,7 +16,7 @@ export function useParentRoute() {
 }
 
 export function useParallelRouters() {
-  return useNuxtApp()?.$parallelRouters as Record<string, ParallelRouter> | undefined
+  return useNuxtApp().$parallelRouters as Record<string, ParallelRouter>
 }
 
 export function useParallelRouter(name: string | undefined = unref(useParentRouterName())) {

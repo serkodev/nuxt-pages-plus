@@ -1,7 +1,12 @@
-import { type RouteRecord, type Router, createMemoryHistory, createRouter, useRouter } from 'vue-router'
+/* eslint-disable no-console */
+import { createMemoryHistory, createRouter } from 'vue-router'
+import type { RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
-import type { ParallelPageOptions } from './types'
+import type { PagesPlusParallelOptions, ParallelPageOptions } from './types'
 import { ParallelRouteNotFoundSymbol } from './symbols'
+import { extractParallelRoutePath } from './utils'
+import { defineNuxtPlugin, useRouter } from '#app'
+import parallelPagesConfig from '#build/parallel-pages-config.mjs'
 
 export interface ParallelRouter extends Router {
   name?: string
@@ -11,7 +16,58 @@ export interface ParallelRouter extends Router {
   setSync: (sync: boolean) => void
 }
 
-export async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
+interface ParallelPagePageMeta {
+  ignore?: boolean
+}
+
+const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
+
+export default defineNuxtPlugin(async () => {
+  const router = useRouter()
+
+  const { separator, pages } = parallelPagesConfig as unknown as PagesPlusParallelOptions
+
+  if (DEBUG)
+    console.log('global router (before)', router.getRoutes())
+
+  const parallelRoutes = router.getRoutes().reduce((acc, route) => {
+    if ((route.meta as { parallel?: ParallelPagePageMeta })?.parallel?.ignore)
+      return acc
+
+    const parallelRoutePath = extractParallelRoutePath(route.path, separator)
+    if (parallelRoutePath) {
+      ;(acc[parallelRoutePath.name] ??= []).push({
+        ...route,
+        path: parallelRoutePath.path,
+      })
+
+      // remove the parallel route from the global router
+      if (route.name && router.hasRoute(route.name))
+        router.removeRoute(route.name)
+    }
+    return acc
+  }, {} as Record<string, RouteRecord[]>)
+
+  if (DEBUG)
+    console.log('parallelRoutes', parallelRoutes)
+
+  // create parallel routers
+  const parallelRouters: Record<string, ParallelRouter> = {}
+  for (const [group, routes] of Object.entries(parallelRoutes)) {
+    const parallelRouter = await createParallelRouter(group, routes, router, pages[group] ?? {})
+    parallelRouters[group] = parallelRouter
+
+    if (DEBUG)
+      console.log(`parallelRouter[${group}]`, parallelRouter.getRoutes())
+  }
+
+  if (DEBUG)
+    console.log('global router (after)', router.getRoutes())
+
+  return { provide: { parallelRouters } }
+})
+
+async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
     sync: true,
     defaultPath: '/',
@@ -55,9 +111,9 @@ export async function createParallelRouter(name: string, routes: RouteRecord[], 
   await ((shouldInitSync && sync()) || tryPush(options.defaultPath))
 
   // sync parallel routers with the global router
-  router.afterEach(() => {
+  router.beforeResolve(async (to) => {
     if (options.sync === true)
-      sync()
+      await tryPush(to.path)
   })
 
   return {
