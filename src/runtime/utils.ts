@@ -1,4 +1,5 @@
 import { encodePath } from 'ufo'
+import type { ParallelRoute } from './types'
 
 function splitParallelPath(path: string, separator: string): [string[], string[]] {
   return path.split('/').reduce<[string[], string[]]>(
@@ -30,7 +31,7 @@ function splitParallelPath(path: string, separator: string): [string[], string[]
 // when /@side/index.vue and /@side.vue both exist, the there will be two /@side, one of them without name and with children
 // when /@side.vue only, the there will be one /@side with name and children
 // when no /@side.vue, there will be not any route with children
-export function extractParallelRoutePath(path: string, separator: string = '@') {
+export function extractParallelRoutePath(path: string, separator: string = '@'): ParallelRoute | undefined {
   // ref: nuxt/src/pages/utils.ts getRoutePath, replace some symbol (e.g '+') with url encoding
   separator = encodePath(separator)
 
@@ -43,4 +44,11 @@ export function extractParallelRoutePath(path: string, separator: string = '@') 
     name: names.join('/'),
     path: paths.join('/'),
   }
+}
+
+export function overrideRoutePath(routePath: ReturnType<typeof extractParallelRoutePath>, override: Partial<ParallelRoute> | undefined) {
+  const name = override?.name ?? routePath?.name
+  const path = override?.path ?? routePath?.path
+  if (name && path !== undefined)
+    return { name, path }
 }

@@ -17,3 +17,8 @@ export interface PagesPlusParallelOptions {
 export interface PagesPlusOptions {
   parallel: Partial<PagesPlusParallelOptions> | false
 }
+
+export interface ParallelRoute {
+  name: string
+  path: string
+}

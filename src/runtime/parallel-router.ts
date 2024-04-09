@@ -2,9 +2,9 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 import type { RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
-import type { PagesPlusParallelOptions, ParallelPageOptions } from './types'
+import type { PagesPlusParallelOptions, ParallelPageOptions, ParallelRoute } from './types'
 import { ParallelRouteNotFoundSymbol } from './symbols'
-import { extractParallelRoutePath } from './utils'
+import { extractParallelRoutePath, overrideRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'
 import parallelPagesConfig from '#build/parallel-pages-config.mjs'
 
@@ -18,6 +18,8 @@ export interface ParallelRouter extends Router {
 
 interface ParallelPagePageMeta {
   ignore?: boolean
+  name?: string
+  path?: string
 }
 
 const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
@@ -31,10 +33,18 @@ export default defineNuxtPlugin(async () => {
     console.log('global router (before)', router.getRoutes())
 
   const parallelRoutes = router.getRoutes().reduce((acc, route) => {
-    if ((route.meta as { parallel?: ParallelPagePageMeta })?.parallel?.ignore)
+    const parallelPageMeta = (route.meta as { parallel?: ParallelPagePageMeta }).parallel ?? {}
+    if (parallelPageMeta.ignore)
       return acc
 
-    const parallelRoutePath = extractParallelRoutePath(route.path, separator)
+    const parallelRoutePath = overrideRoutePath(
+      extractParallelRoutePath(route.path, separator),
+      {
+        name: parallelPageMeta.name,
+        path: parallelPageMeta.path,
+      },
+    )
+
     if (parallelRoutePath) {
       ;(acc[parallelRoutePath.name] ??= []).push({
         ...route,
