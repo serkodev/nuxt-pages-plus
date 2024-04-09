@@ -52,5 +52,21 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
         }
       }
     })
+
+    // modal router
+    addPlugin(resolver.resolve('./runtime/modal-router'))
+
+    addComponent({
+      name: 'ModalPage',
+      filePath: resolver.resolve('./runtime/components/ModalPage.vue'),
+      mode: 'all',
+      priority: 11,
+    })
+
+    addImports([
+      'useModalRouter',
+    ].map((name) => {
+      return { name, from: resolver.resolve('runtime/composables/useModalRouter') }
+    }))
   },
 })
