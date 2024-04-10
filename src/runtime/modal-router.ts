@@ -1,25 +1,22 @@
+/* eslint-disable no-console */
 import { loadRouteLocation } from 'vue-router'
 import type { HistoryState, RouteLocationRaw } from 'vue-router'
 import { defineNuxtPlugin, useRoute, useRouter } from '#app'
-import { computed, ref } from '#imports'
+import { computed, ref, shallowRef, watch } from '#imports'
 
 interface ModalPushRecord {
   id: number
-  backgroundView: string | undefined
+  backgroundView: string
 }
+
+export const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
 
 export default defineNuxtPlugin(async (nuxt) => {
   const router = useRouter()
 
   const pushStack = ref<ModalPushRecord[]>([])
-  const historyState = ref<HistoryState>()
-
-  const backgroundView = computed(() => {
-    const record = pushStack.value.find(record => record.id === historyState.value?.id)
-    return record?.backgroundView
-  })
-
-  const isOpen = computed(() => !!backgroundView.value)
+  const historyState = shallowRef<ModalPushRecord>()
+  const isOpen = computed(() => !!historyState.value?.backgroundView)
 
   function backSize() {
     const currentStatueId = historyState.value?.id
@@ -30,21 +27,22 @@ export default defineNuxtPlugin(async (nuxt) => {
     return stateIdIndex + 1
   }
 
-  // only update history state when the app is mounted, fix SSR issue
+  // history is client side only, only hook after app mounted to prevent SSR hydration mismatch
   nuxt.hook('app:mounted', () => {
+    // load background view if background view not loaded (when navigate from browser)
+    router.beforeResolve(async () => {
+      if (history.state.backgroundView)
+        await loadRouteLocation(router.resolve(history.state.backgroundView))
+    })
+
     router.afterEach(() => {
       historyState.value = history.state
     })
   })
 
-  router.beforeResolve(async () => {
-    if (backgroundView.value)
-      await loadRouteLocation(router.resolve(backgroundView.value))
-  })
-
   const backgroundRoute = computed(() => {
-    if (backgroundView.value) {
-      return router.resolve(backgroundView.value)
+    if (historyState.value?.backgroundView) {
+      return router.resolve(historyState.value?.backgroundView)
     } else {
       return undefined
     }
@@ -56,11 +54,12 @@ export default defineNuxtPlugin(async (nuxt) => {
     if (!backgroundView)
       return router.push(to)
 
-    const id = Date.now()
-    pushStack.value.push({ backgroundView, id })
+    const record = { id: Date.now(), backgroundView } satisfies ModalPushRecord
+
+    pushStack.value.push(record)
     return router.push({
       ...(typeof to === 'string' ? { path: to } : to),
-      state: { id, backgroundView },
+      state: record,
     })
   }
 
@@ -73,13 +72,19 @@ export default defineNuxtPlugin(async (nuxt) => {
   }
 
   function push(to: RouteLocationRaw) {
-    return pushWithBackground(to, backgroundView.value)
+    return pushWithBackground(to, historyState.value?.backgroundView)
   }
 
   function close() {
     const size = backSize()
+
+    if (DEBUG)
+      console.log('close modal back times:', size)
+
     if (size > 0)
       router.go(-size)
+    else
+      router.back()
   }
 
   return {
