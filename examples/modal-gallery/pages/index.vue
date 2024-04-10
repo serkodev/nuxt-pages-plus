@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { isOpen, open, close } = useNuxtApp().$modalRouter
+const { isOpen, open, close } = useModalRouter()
 </script>
 
 <template>

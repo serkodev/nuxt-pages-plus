@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import { createMemoryHistory, createRouter } from 'vue-router'
-import type { RouteRecord, Router } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
+import { reactiveComputed } from '@vueuse/core'
 import type { PagesPlusParallelOptions, ParallelPageOptions } from './types'
 import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath, overrideRoutePath } from './utils'
@@ -61,11 +62,13 @@ export default defineNuxtPlugin(async () => {
   if (DEBUG)
     console.log('parallelRoutes', parallelRoutes)
 
-  // create parallel routers
+  // create parallel routers and routes
   const parallelRouters: Record<string, ParallelRouter> = {}
+  const _parallelRoutes: Record<string, RouteLocationNormalizedLoaded> = {}
   for (const [group, routes] of Object.entries(parallelRoutes)) {
     const parallelRouter = await createParallelRouter(group, routes, router, pages[group] ?? {})
     parallelRouters[group] = parallelRouter
+    _parallelRoutes[group] = reactiveComputed(() => parallelRouter.currentRoute.value)
 
     if (DEBUG)
       console.log(`parallelRouter[${group}]`, parallelRouter.getRoutes())
@@ -74,7 +77,12 @@ export default defineNuxtPlugin(async () => {
   if (DEBUG)
     console.log('global router (after)', router.getRoutes())
 
-  return { provide: { parallelRouters } }
+  return {
+    provide: {
+      parallelRouters,
+      parallelRoutes: _parallelRoutes,
+    },
+  }
 })
 
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {

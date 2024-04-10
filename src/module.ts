@@ -1,4 +1,4 @@
-import { addComponentsDir, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponentsDir, addImports, addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import { extractParallelRoutePath } from './runtime/utils'
 import type { PagesPlusOptions } from './runtime/types'
@@ -20,25 +20,16 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
     const resolver = createResolver(import.meta.url)
 
     addPlugin(resolver.resolve('./runtime/parallel-router'))
-
-    addComponentsDir({
-      path: resolver.resolve('./runtime/components'),
-    })
-
-    addImports([
-      'useParentRouterName',
-      'useParentRouter',
-      'useParentRoute',
-      'useParallelRouter',
-      'resolveParallelRoutersByPath',
-    ].map((name) => {
-      return { name, from: resolver.resolve('runtime/composables/useParallelRouter') }
-    }))
+    addPlugin(resolver.resolve('./runtime/modal-router'))
 
     addTemplate({
       filename: 'parallel-pages-config.mjs',
       getContents: () => `export default ${JSON.stringify(parallel)}`,
     })
+
+    addImportsDir(resolver.resolve('./runtime/composables'))
+
+    addComponentsDir({ path: resolver.resolve('./runtime/components') })
 
     // fix that nuxt nested route does not have a name
     nuxt.hook('pages:extend', (pages) => {
@@ -49,14 +40,5 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
         }
       }
     })
-
-    // modal router
-    addPlugin(resolver.resolve('./runtime/modal-router'))
-
-    addImports([
-      'useModalRouter',
-    ].map((name) => {
-      return { name, from: resolver.resolve('runtime/composables/useModalRouter') }
-    }))
   },
 })

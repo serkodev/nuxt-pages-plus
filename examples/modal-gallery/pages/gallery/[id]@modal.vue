@@ -3,13 +3,17 @@ const page = ref(Number.parseInt(useParentRoute().params.id as string) || 1)
 const items = ref(Array(9))
 const replaceNavigation = ref(false)
 
-watch(page, (page) => {
-  const modalRouter = useModalRouter()
-  if (replaceNavigation.value) {
-    modalRouter.replace(`/gallery/${page}`)
-  } else {
-    modalRouter.push(`/gallery/${page}`)
-  }
+const parentRoute = useParentRoute()
+const page = computed({
+  get: () => Number.parseInt(parentRoute.params.id as string) || 1,
+  set: (val) => {
+    const modalRouter = useModalRouter()
+    if (replaceNavigation.value) {
+      modalRouter.replace(`/gallery/${val}`)
+    } else {
+      modalRouter.push(`/gallery/${val}`)
+    }
+  },
 })
 
 function handleChangeNavigation(index: number) {
