@@ -1,4 +1,4 @@
-import { addComponent, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponentsDir, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import { extractParallelRoutePath } from './runtime/utils'
 import type { PagesPlusOptions } from './runtime/types'
@@ -19,13 +19,10 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
 
     const resolver = createResolver(import.meta.url)
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     addPlugin(resolver.resolve('./runtime/parallel-router'))
 
-    addComponent({
-      name: 'ParallelPage',
-      filePath: resolver.resolve('./runtime/components/ParallelPage.vue'),
-      mode: 'all',
+    addComponentsDir({
+      path: resolver.resolve('./runtime/components'),
     })
 
     addImports([
@@ -55,13 +52,6 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
 
     // modal router
     addPlugin(resolver.resolve('./runtime/modal-router'))
-
-    addComponent({
-      name: 'ModalPage',
-      filePath: resolver.resolve('./runtime/components/ModalPage.vue'),
-      mode: 'all',
-      priority: 11,
-    })
 
     addImports([
       'useModalRouter',
