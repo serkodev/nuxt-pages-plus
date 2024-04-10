@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const page = ref(Number.parseInt(useParentRoute().params.id as string) || 1)
 const items = ref(Array(9))
 const replaceNavigation = ref(false)
 
@@ -23,7 +22,7 @@ function handleChangeNavigation(index: number) {
 
 <template>
   <div>
-    <TheBoundary label="$__PAGES_PATH__" class="p-10 flex flex-col gap-8 justify-center items-center">
+    <TheBoundary label="$__PAGES_PATH__" class="p-10 flex flex-col gap-6 justify-center items-center">
       <div class="flex size-64 items-center justify-center text-[88px] bg-green-400 text-black rounded-2xl">
         {{ useParentRoute().params.id }}
       </div>
@@ -31,6 +30,12 @@ function handleChangeNavigation(index: number) {
       <div class="flex items-center gap-3 text-sm">
         Navigation
         <UTabs :items="[{ label: 'Push' }, { label: 'Replace' }]" :ui="{ wrapper: '!space-y-0' }" @change="handleChangeNavigation" />
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        PlusModalLink
+        <PlusModalLink to="/gallery/9" class="text-red-500" :replace="replaceNavigation">
+          <UButton>Go Last</UButton>
+        </PlusModalLink>
       </div>
     </TheBoundary>
   </div>

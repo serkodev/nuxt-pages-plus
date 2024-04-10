@@ -1,4 +1,4 @@
-import { useNuxtApp, useRouter } from '#app'
+import { useNuxtApp } from '#app'
 
 export function useModalRouter() {
   return useNuxtApp().$modalRouter
