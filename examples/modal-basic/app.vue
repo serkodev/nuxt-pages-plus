@@ -1,3 +1,3 @@
 <template>
-  <ModalPage />
+  <PlusModalPage />
 </template>

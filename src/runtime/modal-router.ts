@@ -50,29 +50,48 @@ export default defineNuxtPlugin(async (nuxt) => {
 
   const route = computed(() => backgroundRoute.value || useRoute())
 
-  function pushWithBackground(to: RouteLocationRaw, backgroundView?: string) {
-    if (!backgroundView)
-      return router.push(to)
+  function backgroundNavigate(action: 'push' | 'replace', to: RouteLocationRaw, backgroundView: string) {
+    const state = { id: Date.now(), backgroundView } satisfies ModalPushRecord
 
-    const record = { id: Date.now(), backgroundView } satisfies ModalPushRecord
-
-    pushStack.value.push(record)
-    return router.push({
+    const _to = {
       ...(typeof to === 'string' ? { path: to } : to),
-      state: record,
-    })
+      state,
+    }
+
+    if (action === 'replace') {
+      // find push stack record and replace it
+      const currentStateIndex = pushStack.value.findIndex(record => record.id === historyState.value?.id)
+      if (currentStateIndex !== -1)
+        pushStack.value[currentStateIndex] = state
+
+      return router.replace(_to)
+    } else {
+      pushStack.value.push(state)
+
+      return router.push(_to)
+    }
   }
 
   function open(to: RouteLocationRaw) {
-    if (backSize() > 0) {
+    if (backSize() > 0)
       return false
-    }
+
     pushStack.value = []
-    return pushWithBackground(to, router.currentRoute.value.fullPath)
+    return backgroundNavigate('push', to, router.currentRoute.value.fullPath)
   }
 
   function push(to: RouteLocationRaw) {
-    return pushWithBackground(to, historyState.value?.backgroundView)
+    if (!historyState.value?.backgroundView)
+      return router.push(to)
+
+    return backgroundNavigate('push', to, historyState.value.backgroundView)
+  }
+
+  function replace(to: RouteLocationRaw) {
+    if (!historyState.value?.backgroundView)
+      return router.replace(to)
+
+    return backgroundNavigate('replace', to, historyState.value.backgroundView)
   }
 
   function close() {
@@ -94,8 +113,9 @@ export default defineNuxtPlugin(async (nuxt) => {
         route,
         backgroundRoute,
         open,
-        push,
         close,
+        push,
+        replace,
       },
     },
   }
