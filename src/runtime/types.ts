@@ -1,6 +1,6 @@
 export interface ParallelPageOptions {
   // default: true
-  mode: 'sync' | 'manual' | 'sync-once'
+  mode: 'sync' | 'sync-once' | 'manual'
 
   // default: undefined
   manualSyncIndexPath?: string
@@ -8,13 +8,11 @@ export interface ParallelPageOptions {
   // default: '/default'
   defaultPath: string | false
 
+  // default: '/not-found'
+  notFoundPath: string | false
+
   // default: false
   disableSoftNavigation: boolean
-}
-
-export interface PagesPlusParallelOptions {
-  separator: string
-  pages: Record<string, Partial<ParallelPageOptions>>
 }
 
 export interface PagesPlusOptions {

@@ -91,6 +91,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   const options = defu(parallelPageOptions, {
     mode: 'sync',
     defaultPath: '/default',
+    notFoundPath: '/not-found',
     disableSoftNavigation: false,
   } satisfies ParallelPageOptions)
 
@@ -114,19 +115,17 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   const inSoftNavigation = ref(false)
 
   // try to push the path, if not found, try to push the not found path
-  function tryPush(path: string, defaultPath: ParallelPageOptions['defaultPath'] = options.defaultPath) {
-    async function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
+  function tryPush(path: string, notFoundPath: ParallelPageOptions['notFoundPath'] = options.notFoundPath) {
+    function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
       for (const _path of [path, ...fallbacks])
         if (_path !== undefined && (options.disableSoftNavigation || hasPath(_path))) {
-          const result = await parallelRouter.push(_path)
-
-          // set state after the navigation is done
-          inSoftNavigation.value = false
-          return result
+          return parallelRouter.push(_path).then(() => {
+            inSoftNavigation.value = false
+          })
         }
       inSoftNavigation.value = true
     }
-    return pushWithFallback(path, defaultPath || undefined)
+    return pushWithFallback(path, notFoundPath || undefined)
   }
 
   // sync the parallel router with the global router
@@ -143,7 +142,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     if (options.manualSyncIndexPath)
       await tryPush(options.manualSyncIndexPath)
   } else {
-    await sync()
+    await (sync() || (options.defaultPath && tryPush(options.defaultPath)))
   }
 
   // sync parallel routers with the global router
