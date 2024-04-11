@@ -10,8 +10,8 @@ const { push } = useModalRouter()
       </button>
     </div>
 
-    <UButton class="!bg-yellow-500" @click="push('/info')">
-      Open Index Modal
+    <UButton class="!bg-yellow-500" @click="push('/info/1')">
+      Open Info
     </UButton>
 
     <PlusModalPage name="modal" />

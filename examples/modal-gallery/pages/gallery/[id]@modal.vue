@@ -45,11 +45,11 @@ function handleChangeNavigation(index: number) {
             <PlusModalLink to="/gallery/9" class="text-red-500" :replace="replaceNavigation">
               <UButton>Go Last</UButton>
             </PlusModalLink>
-          </div>
-          <div class="flex items-center gap-3 text-sm">
-            PlusModalLink new
-            <PlusModalLink new-group to="/gallery/9" class="text-red-500">
-              <UButton>new group</UButton>
+            <PlusModalLink to="/info/1" class="text-red-500">
+              <UButton>Open Info</UButton>
+            </PlusModalLink>
+            <PlusModalLink new-group to="/info/1" class="text-red-500">
+              <UButton>Open Info (new group)</UButton>
             </PlusModalLink>
           </div>
 
