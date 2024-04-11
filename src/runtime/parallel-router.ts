@@ -115,11 +115,14 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
 
   // try to push the path, if not found, try to push the not found path
   function tryPush(path: string, defaultPath: ParallelPageOptions['defaultPath'] = options.defaultPath) {
-    function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
+    async function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
       for (const _path of [path, ...fallbacks])
         if (_path !== undefined && (options.disableSoftNavigation || hasPath(_path))) {
+          const result = await parallelRouter.push(_path)
+
+          // set state after the navigation is done
           inSoftNavigation.value = false
-          return parallelRouter.push(_path)
+          return result
         }
       inSoftNavigation.value = true
     }
