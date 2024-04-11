@@ -14,16 +14,22 @@ export const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VI
 export default defineNuxtPlugin(async (nuxt) => {
   const router = useRouter()
 
-  let routesStackSizeMap: Record<ModalPushRecord['id'], number> = {}
+  let routesStackSizeMap: Record<ModalPushRecord['id'], number[]> = {}
   const historyState = shallowRef<ModalPushRecord>()
-  const isOpen = computed(() => !!historyState.value?.backgroundView)
 
-  function getCurrentStackSize() {
+  function getCurrentStack() {
     const currentStatueId = historyState.value?.id
     if (!currentStatueId)
-      return 0
+      return
+    return routesStackSizeMap[currentStatueId]
+  }
 
-    return routesStackSizeMap[currentStatueId] ?? 0
+  function getAllStackSize() {
+    return (getCurrentStack() ?? []).reduce((acc, cur) => acc + cur, 0)
+  }
+
+  function getCurrentStackSize() {
+    return (getCurrentStack() ?? [0]).slice(-1)[0]
   }
 
   // history is client side only, only hook after app mounted to prevent SSR hydration mismatch
@@ -49,7 +55,7 @@ export default defineNuxtPlugin(async (nuxt) => {
 
   const route = computed(() => backgroundRoute.value || useRoute())
 
-  async function backgroundNavigate(action: 'push' | 'replace', to: RouteLocationRaw, backgroundView: string) {
+  async function backgroundNavigate(action: 'push' | 'push_new' | 'replace', to: RouteLocationRaw, backgroundView: string) {
     const state = { id: `plus-${Date.now()}`, backgroundView } satisfies ModalPushRecord
 
     const _to = {
@@ -58,27 +64,25 @@ export default defineNuxtPlugin(async (nuxt) => {
     }
 
     if (action === 'replace') {
-      routesStackSizeMap[state.id] = getCurrentStackSize()
+      routesStackSizeMap[state.id] = getCurrentStack() ?? [0]
       return router.replace(_to)
-    } else {
-      routesStackSizeMap[state.id] = getCurrentStackSize() + 1
+    } else if (action === 'push') {
+      const stack = [...(getCurrentStack() ?? [0])]
+      stack.push((stack.pop() ?? 0) + 1)
+      routesStackSizeMap[state.id] = stack
+      return router.push(_to)
+    } else if (action === 'push_new') {
+      routesStackSizeMap[state.id] = [...(getCurrentStack() ?? []), 1]
       return router.push(_to)
     }
   }
 
-  function open(to: RouteLocationRaw) {
-    if (getCurrentStackSize() > 0)
-      return false
-
-    routesStackSizeMap = {}
-    return backgroundNavigate('push', to, router.currentRoute.value.fullPath)
-  }
-
-  function push(to: RouteLocationRaw) {
-    if (!historyState.value?.backgroundView)
-      return router.push(to)
-
-    return backgroundNavigate('push', to, historyState.value.backgroundView)
+  function push(to: RouteLocationRaw, newGroup = false) {
+    if (!historyState.value?.backgroundView) {
+      routesStackSizeMap = {}
+      return backgroundNavigate(newGroup ? 'push_new' : 'push', to, router.currentRoute.value.fullPath)
+    }
+    return backgroundNavigate(newGroup ? 'push_new' : 'push', to, historyState.value.backgroundView)
   }
 
   function replace(to: RouteLocationRaw) {
@@ -88,11 +92,11 @@ export default defineNuxtPlugin(async (nuxt) => {
     return backgroundNavigate('replace', to, historyState.value.backgroundView)
   }
 
-  function close() {
-    const size = getCurrentStackSize()
+  function close(allGroups = false) {
+    const size = allGroups ? getAllStackSize() : getCurrentStackSize()
 
     if (DEBUG)
-      console.log('close modal stack size:', size)
+      console.log('close modal stack size:', size, `(all groups: ${allGroups})`)
 
     if (size > 0)
       router.go(-size)
@@ -103,10 +107,8 @@ export default defineNuxtPlugin(async (nuxt) => {
   return {
     provide: {
       modalRouter: {
-        isOpen,
         route,
         backgroundRoute,
-        open,
         close,
         push,
         replace,
