@@ -1,3 +1,7 @@
 code {
     @apply text-sm opacity-50;
 }
+
+.modal-wrapper {
+    @apply fixed top-0 left-0 w-full h-full backdrop-blur dark:bg-black/75 bg-white/75 z-50;
+}
