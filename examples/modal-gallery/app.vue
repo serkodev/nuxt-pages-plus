@@ -1,5 +1,5 @@
 <template>
-  <PlusModalPage v-slot="{ route }">
+  <PlusModalNuxtPage v-slot="{ route }">
     <NuxtPage :route="route" />
-  </PlusModalPage>
+  </PlusModalNuxtPage>
 </template>
