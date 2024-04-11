@@ -12,8 +12,8 @@ import parallelPagesConfig from '#build/parallel-pages-config.mjs'
 export interface ParallelRouter extends Router {
   name?: string
   hasPath: (path: string) => boolean
-  tryPush: (path: string, notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
-  sync: (notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
+  tryPush: (path: string, defaultPath?: ParallelPageOptions['defaultPath']) => ReturnType<Router['push']> | undefined
+  sync: (defaultPath?: ParallelPageOptions['defaultPath']) => ReturnType<Router['push']> | undefined
   setSync: (sync: boolean) => void
 }
 
@@ -87,9 +87,9 @@ export default defineNuxtPlugin(async () => {
 
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
-    sync: true,
-    defaultPath: '/',
-    notFoundPath: '/not-found',
+    mode: 'sync',
+    defaultPath: '/default',
+    skipNavigateIfNotFound: false,
   } satisfies ParallelPageOptions)
 
   const parallelRouter = createRouter({
@@ -99,20 +99,24 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
 
   // add a not-found route to detect not found routes
   // to prevent "No match found for location with path" console warning from vue-router
-  parallelRouter.addRoute({ path: '/:all(.*)*', name: ParallelRouteNotFoundSymbol, component: {} })
+  parallelRouter.addRoute({
+    path: '/:all(.*)*',
+    name: ParallelRouteNotFoundSymbol,
+    component: { render: () => undefined },
+  })
 
   function hasPath(path: string) {
     return parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
   }
 
   // try to push the path, if not found, try to push the not found path
-  function tryPush(path: string, notFoundPath: ParallelPageOptions['notFoundPath'] = options.notFoundPath) {
+  function tryPush(path: string, defaultPath: ParallelPageOptions['defaultPath'] = options.defaultPath) {
     function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
       for (const _path of [path, ...fallbacks])
-        if (_path !== undefined && hasPath(_path))
+        if (_path !== undefined && (!options.skipNavigateIfNotFound || hasPath(_path)))
           return parallelRouter.push(_path)
     }
-    return pushWithFallback(path, notFoundPath || undefined)
+    return pushWithFallback(path, defaultPath || undefined)
   }
 
   // sync the parallel router with the global router
@@ -121,16 +125,20 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   }
 
   function setSync(sync: boolean) {
-    options.sync = sync
+    options.mode = sync ? 'sync' : 'manual'
   }
 
   // initialize sync. if unable to resolve the sync path or if sync is disabled, push the default path.
-  const shouldInitSync = options.sync === 'init' || options.sync === true
-  await ((shouldInitSync && sync()) || tryPush(options.defaultPath))
+  if (options.mode === 'manual') {
+    if (options.manualSyncIndexPath)
+      await tryPush(options.manualSyncIndexPath)
+  } else {
+    await sync()
+  }
 
   // sync parallel routers with the global router
   router.beforeResolve(async (to) => {
-    if (options.sync === true)
+    if (options.mode === 'sync')
       await tryPush(to.path)
   })
 

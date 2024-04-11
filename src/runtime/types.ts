@@ -1,12 +1,15 @@
 export interface ParallelPageOptions {
   // default: true
-  sync: boolean | 'init'
+  mode: 'sync' | 'manual' | 'sync-once'
 
-  // default: '/'
-  defaultPath: string
+  // default: undefined
+  manualSyncIndexPath?: string
 
-  // default: '/not-found'
-  notFoundPath: string | false
+  // default: '/default'
+  defaultPath: string | false
+
+  // default: false
+  skipNavigateIfNotFound: boolean
 }
 
 export interface PagesPlusParallelOptions {
