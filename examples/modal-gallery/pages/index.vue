@@ -14,6 +14,6 @@ const { push } = useModalRouter()
       Open Index Modal
     </UButton>
 
-    <ParallelPage name="modal" />
+    <ModalPage name="modal" />
   </TheBoundary>
 </template>
