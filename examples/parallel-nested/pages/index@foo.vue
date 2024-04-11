@@ -1,5 +1,5 @@
 <template>
   <ExampleView label="$__PAGES_PATH__">
-    <ParallelPage name="bar" />
+    <PlusParallelPage name="bar" />
   </ExampleView>
 </template>

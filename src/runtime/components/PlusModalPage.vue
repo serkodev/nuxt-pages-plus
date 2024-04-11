@@ -6,5 +6,5 @@ defineProps<{
 </script>
 
 <template>
-  <ParallelPage :name auto-hide v-bind="$attrs" />
+  <PlusParallelPage :name auto-hide v-bind="$attrs" />
 </template>
