@@ -3,7 +3,13 @@ import { defineComponent, h, useModalRouter } from '#imports'
 
 export default defineComponent({
   name: 'PlusModalLink',
-  props: NuxtLink.props,
+  props: {
+    ...NuxtLink.props,
+    newGroup: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup(props, { slots }) {
     const url = props.to || props.href
 
@@ -17,7 +23,7 @@ export default defineComponent({
       if (props.replace) {
         modalRouter.replace(url)
       } else {
-        modalRouter.push(url)
+        modalRouter.push(url, props.newGroup)
       }
     }
 

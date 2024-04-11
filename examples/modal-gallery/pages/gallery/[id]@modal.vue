@@ -46,6 +46,12 @@ function handleChangeNavigation(index: number) {
               <UButton>Go Last</UButton>
             </PlusModalLink>
           </div>
+          <div class="flex items-center gap-3 text-sm">
+            PlusModalLink new
+            <PlusModalLink new-group to="/gallery/9" class="text-red-500">
+              <UButton>new group</UButton>
+            </PlusModalLink>
+          </div>
 
           <UButton class="!bg-blue-500" @click="$modalRouter.close()">
             Close
