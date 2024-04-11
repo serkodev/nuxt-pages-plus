@@ -17,20 +17,12 @@ export default defineNuxtPlugin(async (nuxt) => {
   let routesStackSizeMap: Record<ModalPushRecord['id'], number[]> = {}
   const historyState = shallowRef<ModalPushRecord>()
 
-  function getCurrentStack() {
+  const currentStack = computed(() => {
     const currentStatueId = historyState.value?.id
     if (!currentStatueId)
       return
     return routesStackSizeMap[currentStatueId]
-  }
-
-  function getAllStackSize() {
-    return (getCurrentStack() ?? []).reduce((acc, cur) => acc + cur, 0)
-  }
-
-  function getCurrentStackSize() {
-    return (getCurrentStack() ?? [0]).slice(-1)[0]
-  }
+  })
 
   // history is client side only, only hook after app mounted to prevent SSR hydration mismatch
   nuxt.hook('app:mounted', () => {
@@ -64,15 +56,15 @@ export default defineNuxtPlugin(async (nuxt) => {
     }
 
     if (action === 'replace') {
-      routesStackSizeMap[state.id] = getCurrentStack() ?? [0]
+      routesStackSizeMap[state.id] = currentStack.value ?? [0]
       return router.replace(_to)
     } else if (action === 'push') {
-      const stack = [...(getCurrentStack() ?? [0])]
+      const stack = [...(currentStack.value ?? [0])]
       stack.push((stack.pop() ?? 0) + 1)
       routesStackSizeMap[state.id] = stack
       return router.push(_to)
     } else if (action === 'push_new') {
-      routesStackSizeMap[state.id] = [...(getCurrentStack() ?? []), 1]
+      routesStackSizeMap[state.id] = [...(currentStack.value ?? []), 1]
       return router.push(_to)
     }
   }
@@ -93,6 +85,14 @@ export default defineNuxtPlugin(async (nuxt) => {
   }
 
   function close(allGroups = false) {
+    function getAllStackSize() {
+      return (currentStack.value ?? []).reduce((acc, cur) => acc + cur, 0)
+    }
+
+    function getCurrentStackSize() {
+      return (currentStack.value ?? [0]).slice(-1)[0]
+    }
+
     const size = allGroups ? getAllStackSize() : getCurrentStackSize()
 
     if (DEBUG)
@@ -109,6 +109,7 @@ export default defineNuxtPlugin(async (nuxt) => {
       modalRouter: {
         route,
         backgroundRoute,
+        currentStack,
         close,
         push,
         replace,
