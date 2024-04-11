@@ -4,7 +4,11 @@ import { ParallelRouterSymbol } from '../symbols'
 import { computed, inject, provide, unref, useParallelRouter } from '#imports'
 
 const props = defineProps<{
+  // Unique name of the parallel router
   name: string
+
+  // Disable rendering during soft navigation
+  autoHide?: boolean
 }>()
 
 const parentRouterName = inject(ParallelRouterSymbol, undefined)
@@ -22,5 +26,5 @@ const route = computed(() => router.value?.currentRoute.value)
 </script>
 
 <template>
-  <RouterView v-if="router" :route="route" v-bind="$attrs" />
+  <RouterView v-if="router && (!props.autoHide || !router.inSoftNavigation.value)" :route="route" v-bind="$attrs" />
 </template>

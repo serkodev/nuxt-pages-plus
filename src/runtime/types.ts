@@ -9,7 +9,7 @@ export interface ParallelPageOptions {
   defaultPath: string | false
 
   // default: false
-  skipNavigateIfNotFound: boolean
+  disableSoftNavigation: boolean
 }
 
 export interface PagesPlusParallelOptions {

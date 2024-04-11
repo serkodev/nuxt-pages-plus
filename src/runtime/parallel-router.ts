@@ -8,9 +8,11 @@ import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath, overrideRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'
 import parallelPagesConfig from '#build/parallel-pages-config.mjs'
+import { type Ref, ref } from '#imports'
 
 export interface ParallelRouter extends Router {
   name?: string
+  inSoftNavigation: Ref<boolean>
   hasPath: (path: string) => boolean
   tryPush: (path: string, defaultPath?: ParallelPageOptions['defaultPath']) => ReturnType<Router['push']> | undefined
   sync: (defaultPath?: ParallelPageOptions['defaultPath']) => ReturnType<Router['push']> | undefined
@@ -89,7 +91,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   const options = defu(parallelPageOptions, {
     mode: 'sync',
     defaultPath: '/default',
-    skipNavigateIfNotFound: false,
+    disableSoftNavigation: false,
   } satisfies ParallelPageOptions)
 
   const parallelRouter = createRouter({
@@ -109,12 +111,17 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     return parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
   }
 
+  const inSoftNavigation = ref(false)
+
   // try to push the path, if not found, try to push the not found path
   function tryPush(path: string, defaultPath: ParallelPageOptions['defaultPath'] = options.defaultPath) {
     function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
       for (const _path of [path, ...fallbacks])
-        if (_path !== undefined && (!options.skipNavigateIfNotFound || hasPath(_path)))
+        if (_path !== undefined && (options.disableSoftNavigation || hasPath(_path))) {
+          inSoftNavigation.value = false
           return parallelRouter.push(_path)
+        }
+      inSoftNavigation.value = true
     }
     return pushWithFallback(path, defaultPath || undefined)
   }
@@ -145,6 +152,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   return {
     ...parallelRouter,
     name,
+    inSoftNavigation,
     hasPath,
     tryPush,
     sync,

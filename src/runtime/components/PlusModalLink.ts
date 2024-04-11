@@ -1,4 +1,3 @@
-import { checkPrimeSync } from 'node:crypto'
 import { NuxtLink } from '#components'
 import { defineComponent, h, useModalRouter } from '#imports'
 
