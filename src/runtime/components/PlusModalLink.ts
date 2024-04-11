@@ -1,5 +1,5 @@
 import { NuxtLink } from '#components'
-import { defineComponent, h, useModalRouter } from '#imports'
+import { computed, defineComponent, h, useModalRouter } from '#imports'
 
 export default defineComponent({
   name: 'PlusModalLink',
@@ -11,7 +11,7 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const url = props.to || props.href
+    const url = computed(() => props.to || props.href)
 
     function onClick(e: MouseEvent) {
       if (!url || e.ctrlKey || e.shiftKey || e.metaKey || e.altKey)
@@ -21,9 +21,9 @@ export default defineComponent({
 
       const modalRouter = useModalRouter()
       if (props.replace) {
-        modalRouter.replace(url)
+        modalRouter.replace(url.value)
       } else {
-        modalRouter.push(url, props.newGroup)
+        modalRouter.push(url.value, props.newGroup)
       }
     }
 
