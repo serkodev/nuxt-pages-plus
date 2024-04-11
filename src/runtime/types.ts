@@ -16,10 +16,17 @@ export interface ParallelPageOptions {
 }
 
 export interface PagesPlusOptions {
-  parallel: Partial<PagesPlusParallelOptions> | false
+  separator: string
+  parallelPages: Record<string, Partial<ParallelPageOptions>>
 }
 
 export interface ParallelRoute {
   name: string
   path: string
+}
+
+export interface ParallelPagePageMeta {
+  ignore?: boolean
+  name?: string
+  path?: string
 }

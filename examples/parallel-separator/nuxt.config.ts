@@ -2,8 +2,6 @@
 export default defineNuxtConfig({
   extends: '../base',
   pagesPlus: {
-    parallel: {
-      separator: '+',
-    },
+    separator: '+',
   },
 })

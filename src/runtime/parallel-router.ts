@@ -3,26 +3,20 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import type { RouteLocationNormalizedLoaded, RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
 import { reactiveComputed } from '@vueuse/core'
-import type { PagesPlusParallelOptions, ParallelPageOptions } from './types'
+import type { PagesPlusOptions, ParallelPageOptions, ParallelPagePageMeta } from './types'
 import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath, overrideRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'
-import parallelPagesConfig from '#build/parallel-pages-config.mjs'
+import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
 import { type Ref, ref } from '#imports'
 
 export interface ParallelRouter extends Router {
   name?: string
   inSoftNavigation: Ref<boolean>
   hasPath: (path: string) => boolean
-  tryPush: (path: string, defaultPath?: ParallelPageOptions['defaultPath']) => ReturnType<Router['push']> | undefined
-  sync: (defaultPath?: ParallelPageOptions['defaultPath']) => ReturnType<Router['push']> | undefined
+  tryPush: (path: string, notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
+  sync: (notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
   setSync: (sync: boolean) => void
-}
-
-interface ParallelPagePageMeta {
-  ignore?: boolean
-  name?: string
-  path?: string
 }
 
 const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
@@ -30,7 +24,7 @@ const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGE
 export default defineNuxtPlugin(async () => {
   const router = useRouter()
 
-  const { separator, pages } = parallelPagesConfig as unknown as PagesPlusParallelOptions
+  const { separator, parallelPages: pagesOptions } = pagesPlusOptions as unknown as PagesPlusOptions
 
   if (DEBUG)
     console.log('global router (before)', router.getRoutes())
@@ -68,7 +62,7 @@ export default defineNuxtPlugin(async () => {
   const parallelRouters: Record<string, ParallelRouter> = {}
   const _parallelRoutes: Record<string, RouteLocationNormalizedLoaded> = {}
   for (const [group, routes] of Object.entries(parallelRoutes)) {
-    const parallelRouter = await createParallelRouter(group, routes, router, pages[group] ?? {})
+    const parallelRouter = await createParallelRouter(group, routes, router, pagesOptions[group] ?? {})
     parallelRouters[group] = parallelRouter
     _parallelRoutes[group] = reactiveComputed(() => parallelRouter.currentRoute.value)
 

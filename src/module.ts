@@ -9,13 +9,10 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
     configKey: 'pagesPlus',
   },
   setup(resolvedOptions, nuxt) {
-    if (resolvedOptions?.parallel === false)
-      return
-
-    const parallel = defu(resolvedOptions.parallel, {
+    const options = defu(resolvedOptions, {
       separator: '@',
-      pages: {},
-    } satisfies PagesPlusOptions['parallel'])
+      parallelPages: {},
+    } satisfies PagesPlusOptions)
 
     const resolver = createResolver(import.meta.url)
 
@@ -23,8 +20,8 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
     addPlugin(resolver.resolve('./runtime/modal-router'))
 
     addTemplate({
-      filename: 'parallel-pages-config.mjs',
-      getContents: () => `export default ${JSON.stringify(parallel)}`,
+      filename: 'nuxt-pages-plus-options.mjs',
+      getContents: () => `export default ${JSON.stringify(options)}`,
     })
 
     addImportsDir(resolver.resolve('./runtime/composables'))
@@ -34,7 +31,7 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
     // fix that nuxt nested route does not have a name
     nuxt.hook('pages:extend', (pages) => {
       for (const page of pages) {
-        if (extractParallelRoutePath(page.path, parallel.separator)) {
+        if (extractParallelRoutePath(page.path, options.separator)) {
           if (!page.name)
             page.name = `__PAGES_PLUS__${page.path}`
         }

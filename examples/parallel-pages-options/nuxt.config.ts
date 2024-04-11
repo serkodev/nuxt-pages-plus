@@ -2,15 +2,12 @@
 export default defineNuxtConfig({
   extends: '../base',
   pagesPlus: {
-    parallel: {
-      pages: {
-        left: {
-          sync: false,
-          defaultPath: '/foo',
-        },
-        right: {
-          defaultPath: '/my-default',
-        },
+    parallelPages: {
+      left: {
+        defaultPath: '/foo',
+      },
+      right: {
+        defaultPath: '/my-default',
       },
     },
   },
