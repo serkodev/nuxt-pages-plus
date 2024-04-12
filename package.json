@@ -27,7 +27,7 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base",
     "play": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev playground",
     "play:build": "nuxi build playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --no-output --release && npm publish --tag beta && git push --follow-tags",
+    "release": "npm run lint && npm run test && npm run prepack && changelogen --premajor=beta --no-output --release && npm publish --tag beta && git push --follow-tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
