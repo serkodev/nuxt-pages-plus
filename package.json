@@ -22,9 +22,11 @@
   ],
   "scripts": {
     "prepack": "nuxt-module-build build",
-    "dev": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev playground",
-    "dev:build": "nuxi build playground",
+    "dev": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev",
+    "dev:build": "nuxi build",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base",
+    "play": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev playground",
+    "play:build": "nuxi build playground",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
