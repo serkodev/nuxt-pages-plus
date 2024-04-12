@@ -2,9 +2,6 @@
   "private": true,
   "type": "module",
   "main": "./nuxt.config.ts",
-  "scripts": {
-    "postinstall": "nuxt prepare"
-  },
   "dependencies": {
     "@nuxt/ui": "^2.15.1",
     "nuxt": "^3.11.2"

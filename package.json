@@ -21,16 +21,16 @@
     "dist"
   ],
   "scripts": {
-    "postinstall": "nuxt-module-build prepare",
     "prepack": "nuxt-module-build build",
     "dev": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev playground",
     "dev:build": "nuxi build playground",
-    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "prepare:all": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare"
   },
   "dependencies": {
     "@nuxt/kit": "^3.11.2",
@@ -51,5 +51,6 @@
     "nuxt": "^3.11.2",
     "vitest": "^1.4.0",
     "vue-router": "^4.3.0"
-  }
+  },
+  "packageManager": "pnpm@8.15.5"
 }
