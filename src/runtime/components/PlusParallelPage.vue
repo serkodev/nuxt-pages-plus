@@ -9,6 +9,9 @@ const props = defineProps<{
 
   // Disable rendering during soft navigation
   autoHide?: boolean
+
+  // Name of the router view to use
+  routerViewName?: string
 }>()
 
 const parentRouterName = inject(ParallelRouterSymbol, undefined)
@@ -26,5 +29,10 @@ const route = computed(() => router.value?.currentRoute.value)
 </script>
 
 <template>
-  <RouterView v-if="router && (!props.autoHide || !router.inSoftNavigation.value)" :route="route" v-bind="$attrs" />
+  <RouterView
+    v-if="router && (!props.autoHide || !router.inSoftNavigation.value)"
+    :name="routerViewName"
+    :route="route"
+    v-bind="$attrs"
+  />
 </template>
