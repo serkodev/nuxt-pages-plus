@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const props = defineProps<{
-  label: string
+const props = withDefaults(defineProps<{
+  label?: string
   color?: string
-}>()
+}>(), {
+  label: '',
+})
 
 const colors = [
   'red',

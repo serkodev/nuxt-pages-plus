@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  label: string
+  label?: string
   color?: string
 }>()
 
@@ -10,9 +10,9 @@ const path = useParentRoute().path
 
 <template>
   <TheBoundary :label :color>
-    <UContainer>
-      <div class="my-4">
-        <h1 class="my-6">
+    <UContainer class="py-6">
+      <div class="flex flex-col gap-6 items-start">
+        <h1>
           <div class="flex items-center gap-3">
             <div class="opacity-50 border inline px-1.5 py-0.5 rounded-md text-sm">
               {{ routerName }}
@@ -25,8 +25,8 @@ const path = useParentRoute().path
         <p>
           This is the <code>{{ path }}</code> page of <code>{{ routerName }}</code> router.
         </p>
+        <slot />
       </div>
-      <slot />
     </UContainer>
   </TheBoundary>
 </template>
