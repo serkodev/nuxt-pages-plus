@@ -1,4 +1,4 @@
-import { addComponentsDir, addImports, addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponentsDir, addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import { extractParallelRoutePath } from './runtime/utils'
 import type { PagesPlusOptions } from './runtime/types'
