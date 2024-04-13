@@ -180,8 +180,8 @@ You can place your parallel routes pages in several different ways.
   | ---------------------- | ------- | --------- | ------------------------------ |
   | `@foo/@bar/about.vue`  | foo/bar | /about    | nested name                    |
   | `about@foo/us@bar.vue` | foo/bar | /about/us | nested name in file and folder |
-  | `@bar@foo/about.vue`   | foo/bar | /about    | multiple nested name in folder |
-  | `about/us@bar@foo.vue` | foo/bar | /about/us | multiple nested name in file   |
+  | `@foo@bar/about.vue`   | foo/bar | /about    | multiple nested name in folder |
+  | `about/us@foo@bar.vue` | foo/bar | /about/us | multiple nested name in file   |
 </details>
 
 ### Escape `@` separator
@@ -220,12 +220,12 @@ definePageMeta({
 By setting `parallel.name` and `parallel.path` in the page meta to override the processing of the route. ([Example](./examples/parallel-page-meta/pages/index@left.vue))
 
 ```html
-<!-- /pages/[user]@bar@foo.vue -->
+<!-- /pages/[user]@foo@bar.vue -->
 <script setup lang="ts">
 definePageMeta({
   parallel: {
-    name: 'foo',
-    path: '[user]@bar'
+    path: '[user]@foo'
+    name: 'bar',
   },
 })
 </script>

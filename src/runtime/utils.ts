@@ -15,8 +15,7 @@ function splitParallelPath(path: string, separator: string): [string[], string[]
         if (spath.length > 0 && spath !== 'index')
           paths.push(spath)
 
-        // TODO: use reverse or not?
-        names.push(...sname.reverse())
+        names.push(...sname)
       } else if (p !== 'index') {
         // more then 2 separator or no separator
         paths.push(p)

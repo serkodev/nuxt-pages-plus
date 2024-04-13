@@ -53,7 +53,7 @@ describe('extractParallelRoutePath', () => {
       }
     `)
 
-    expect(extractParallelRoutePath('/foo/bar/baz@main@side')).toMatchInlineSnapshot(`
+    expect(extractParallelRoutePath('/foo/bar/baz@side@main')).toMatchInlineSnapshot(`
       {
         "name": "side/main",
         "path": "/foo/bar/baz",
