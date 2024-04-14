@@ -1,14 +1,14 @@
 export interface ParallelPageOptions {
-  // default: true
+  // default: 'sync'
   mode: 'sync' | 'sync-once' | 'manual'
 
   // default: undefined
   manualSyncIndexPath?: string
 
-  // default: '/default'
+  // default: '/~default'
   defaultPath: string | false
 
-  // default: '/not-found'
+  // default: '/~not-found'
   notFoundPath: string | false
 
   // default: false

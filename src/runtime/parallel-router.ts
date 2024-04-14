@@ -84,8 +84,8 @@ export default defineNuxtPlugin(async () => {
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
     mode: 'sync',
-    defaultPath: '/default',
-    notFoundPath: '/not-found',
+    defaultPath: '/~default',
+    notFoundPath: '/~not-found',
     disableSoftNavigation: false,
   } satisfies ParallelPageOptions)
 
