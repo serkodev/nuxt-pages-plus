@@ -12,7 +12,7 @@ export interface ParallelPageOptions {
   notFoundPath: string | false
 
   // default: false
-  disableSoftNavigation: boolean
+  disableFallback: boolean
 }
 
 export interface PagesPlusOptions {

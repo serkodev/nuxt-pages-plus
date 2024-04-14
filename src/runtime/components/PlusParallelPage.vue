@@ -7,7 +7,7 @@ const props = defineProps<{
   // Unique name of the parallel router
   name: string
 
-  // Disable rendering during soft navigation
+  // Disable rendering if fallback fail
   autoHide?: boolean
 
   // Name of the router view to use
@@ -30,7 +30,7 @@ const route = computed(() => router.value?.currentRoute.value)
 
 <template>
   <RouterView
-    v-if="router && (!props.autoHide || !router.inSoftNavigation.value)"
+    v-if="router && (!props.autoHide || !router.isFallbackFailed.value)"
     :name="routerViewName"
     :route="route"
     v-bind="$attrs"

@@ -12,7 +12,7 @@ import { type Ref, ref } from '#imports'
 
 export interface ParallelRouter extends Router {
   name?: string
-  inSoftNavigation: Ref<boolean>
+  isFallbackFailed: Ref<boolean>
   hasPath: (path: string) => boolean
   tryPush: (path: string, notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
   sync: (notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
@@ -86,7 +86,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     mode: 'sync',
     defaultPath: '/~default',
     notFoundPath: '/~not-found',
-    disableSoftNavigation: false,
+    disableFallback: false,
   } satisfies ParallelPageOptions)
 
   const parallelRouter = createRouter({
@@ -106,18 +106,18 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     return parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
   }
 
-  const inSoftNavigation = ref(false)
+  const isFallbackFailed = ref(false)
 
   // try to push the path, if not found, try to push the not found path
   function tryPush(path: string, notFoundPath: ParallelPageOptions['notFoundPath'] = options.notFoundPath) {
     function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
       for (const _path of [path, ...fallbacks])
-        if (_path !== undefined && (options.disableSoftNavigation || hasPath(_path))) {
+        if (_path !== undefined && (options.disableFallback || hasPath(_path))) {
           return parallelRouter.push(_path).then(() => {
-            inSoftNavigation.value = false
+            isFallbackFailed.value = false
           })
         }
-      inSoftNavigation.value = true
+      isFallbackFailed.value = true
     }
     return pushWithFallback(path, notFoundPath || undefined)
   }
@@ -148,7 +148,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   return {
     ...parallelRouter,
     name,
-    inSoftNavigation,
+    isFallbackFailed,
     hasPath,
     tryPush,
     sync,
