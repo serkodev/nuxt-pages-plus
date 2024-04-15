@@ -4,10 +4,12 @@ export default defineNuxtConfig({
   pagesPlus: {
     parallelPages: {
       left: {
-        defaultPath: '/foo',
+        index: '/foo',
       },
       right: {
-        defaultPath: '/my-default',
+        fallback: {
+          redirect: '/not-found',
+        },
       },
     },
   },

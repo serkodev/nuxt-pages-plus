@@ -41,7 +41,7 @@ export function extractParallelRoutePath(path: string, separator: string = '@'):
 
   return {
     name: names.join('/'),
-    path: paths.join('/'),
+    path: paths.join('/') || '/',
   }
 }
 
