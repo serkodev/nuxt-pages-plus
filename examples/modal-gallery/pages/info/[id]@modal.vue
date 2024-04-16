@@ -30,7 +30,7 @@ const id = computed(() => Number.parseInt(parentRoute.params.id as string) || 1)
           Close
         </UButton>
 
-        <UButton v-if="(($modalRouter.currentStack.value ?? []).length ?? 0) > 1" @click="$modalRouter.close(true)">
+        <UButton v-if="(($modalRouter.stacks.value ?? []).length ?? 0) > 1" @click="$modalRouter.close(true)">
           Close All
         </UButton>
       </TheBoundary>

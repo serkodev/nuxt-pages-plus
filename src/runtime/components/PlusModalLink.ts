@@ -5,7 +5,7 @@ export default defineComponent({
   name: 'PlusModalLink',
   props: {
     ...NuxtLink.props,
-    newGroup: {
+    open: {
       type: Boolean,
       default: false,
     },
@@ -23,7 +23,7 @@ export default defineComponent({
       if (props.replace) {
         modalRouter.replace(url.value)
       } else {
-        modalRouter.push(url.value, props.newGroup)
+        modalRouter.push(url.value, props.open)
       }
     }
 

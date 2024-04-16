@@ -12,9 +12,9 @@ interface ModalPushRecord {
 export interface ModalRouter {
   route: Ref<RouteLocationNormalizedLoaded>
   backgroundRoute: Ref<RouteLocationNormalizedLoaded | undefined>
-  currentStack: Ref<number[] | undefined>
-  close: (allGroups?: boolean) => void
-  push: (to: RouteLocationRaw, newGroup?: boolean) => ReturnType<Router['push']>
+  stacks: Ref<number[] | undefined>
+  close: (allOpened?: boolean) => void
+  push: (to: RouteLocationRaw, open?: boolean) => ReturnType<Router['push']>
   replace: (to: RouteLocationRaw) => ReturnType<Router['replace']>
 }
 
@@ -26,7 +26,7 @@ export default defineNuxtPlugin(async (nuxt) => {
   let routesStackSizeMap: Record<ModalPushRecord['id'], number[]> = {}
   const historyState = shallowRef<ModalPushRecord>()
 
-  const currentStack = computed(() => {
+  const stacks = computed(() => {
     const currentStatueId = historyState.value?.id
     if (!currentStatueId)
       return
@@ -56,7 +56,7 @@ export default defineNuxtPlugin(async (nuxt) => {
 
   const route = computed(() => backgroundRoute.value || useRoute())
 
-  async function backgroundNavigate(action: 'push' | 'push_new' | 'replace', to: RouteLocationRaw, backgroundView: string) {
+  async function backgroundNavigate(action: 'push' | 'push_open' | 'replace', to: RouteLocationRaw, backgroundView: string) {
     const state = { id: `plus-${Date.now()}`, backgroundView } satisfies ModalPushRecord
 
     const _to = {
@@ -65,25 +65,25 @@ export default defineNuxtPlugin(async (nuxt) => {
     }
 
     if (action === 'replace') {
-      routesStackSizeMap[state.id] = currentStack.value ?? [0]
+      routesStackSizeMap[state.id] = stacks.value ?? [0]
       return router.replace(_to)
     } else if (action === 'push') {
-      const stack = [...(currentStack.value ?? [0])]
-      stack.push((stack.pop() ?? 0) + 1)
-      routesStackSizeMap[state.id] = stack
+      const newStack = [...(stacks.value ?? [0])]
+      newStack.push((newStack.pop() ?? 0) + 1)
+      routesStackSizeMap[state.id] = newStack
       return router.push(_to)
-    } else if (action === 'push_new') {
-      routesStackSizeMap[state.id] = [...(currentStack.value ?? []), 1]
+    } else if (action === 'push_open') {
+      routesStackSizeMap[state.id] = [...(stacks.value ?? []), 1]
       return router.push(_to)
     }
   }
 
-  function push(to: RouteLocationRaw, newGroup = false) {
+  function push(to: RouteLocationRaw, open = false) {
     if (!historyState.value?.backgroundView) {
       routesStackSizeMap = {}
-      return backgroundNavigate(newGroup ? 'push_new' : 'push', to, router.currentRoute.value.fullPath)
+      return backgroundNavigate(open ? 'push_open' : 'push', to, router.currentRoute.value.fullPath)
     }
-    return backgroundNavigate(newGroup ? 'push_new' : 'push', to, historyState.value.backgroundView)
+    return backgroundNavigate(open ? 'push_open' : 'push', to, historyState.value.backgroundView)
   }
 
   function replace(to: RouteLocationRaw) {
@@ -93,19 +93,19 @@ export default defineNuxtPlugin(async (nuxt) => {
     return backgroundNavigate('replace', to, historyState.value.backgroundView)
   }
 
-  function close(allGroups = false) {
+  function close(allOpened = false) {
     function getAllStackSize() {
-      return (currentStack.value ?? []).reduce((acc, cur) => acc + cur, 0)
+      return (stacks.value ?? []).reduce((acc, cur) => acc + cur, 0)
     }
 
     function getCurrentStackSize() {
-      return (currentStack.value ?? [0]).slice(-1)[0]
+      return (stacks.value ?? [0]).slice(-1)[0]
     }
 
-    const size = allGroups ? getAllStackSize() : getCurrentStackSize()
+    const size = allOpened ? getAllStackSize() : getCurrentStackSize()
 
     if (DEBUG)
-      console.log('close modal stack size:', size, `(all groups: ${allGroups})`)
+      console.log('close modal stack size:', size, `(all stacks: ${allOpened})`)
 
     if (size > 0)
       router.go(-size)
@@ -118,7 +118,7 @@ export default defineNuxtPlugin(async (nuxt) => {
       modalRouter: {
         route,
         backgroundRoute,
-        currentStack,
+        stacks,
         close,
         push,
         replace,

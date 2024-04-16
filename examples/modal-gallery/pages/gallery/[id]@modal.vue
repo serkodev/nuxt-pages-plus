@@ -46,10 +46,10 @@ function handleChangeNavigation(index: number) {
               <UButton>Go Last</UButton>
             </PlusModalLink>
             <PlusModalLink to="/info/1" class="text-red-500">
-              <UButton>Open Info</UButton>
+              <UButton>Go Info</UButton>
             </PlusModalLink>
-            <PlusModalLink new-group to="/info/1" class="text-red-500">
-              <UButton>Open Info (new group)</UButton>
+            <PlusModalLink open to="/info/1" class="text-red-500">
+              <UButton>Open Info</UButton>
             </PlusModalLink>
           </div>
 
