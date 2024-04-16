@@ -8,14 +8,17 @@ import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath, overrideRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'
 import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
-import { type Ref, ref } from '#imports'
+import { reactive } from '#imports'
 
 export interface ParallelRouter extends Router {
   name?: string
-  isFallbackFailed: Ref<boolean>
+  fallback: {
+    notFound: boolean
+    index: boolean
+  }
   hasPath: (path: string) => boolean
-  tryPush: (path: string, notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
-  sync: (notFoundPath?: ParallelPageOptions['notFoundPath']) => ReturnType<Router['push']> | undefined
+  tryPush: (path: string, fallbackRedirect?: string) => ReturnType<Router['push']> | undefined
+  sync: () => ReturnType<Router['push']> | undefined
   setSync: (sync: boolean) => void
 }
 
@@ -43,7 +46,7 @@ export default defineNuxtPlugin(async () => {
     )
 
     if (parallelRoutePath) {
-      ;(acc[parallelRoutePath.name] ??= []).push({
+      ; (acc[parallelRoutePath.name] ??= []).push({
         ...route,
         path: parallelRoutePath.path,
       })
@@ -84,9 +87,7 @@ export default defineNuxtPlugin(async () => {
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
     mode: 'sync',
-    defaultPath: '/~default',
-    notFoundPath: '/~not-found',
-    disableFallback: false,
+    fallback: true,
   } satisfies ParallelPageOptions)
 
   const parallelRouter = createRouter({
@@ -106,20 +107,33 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     return parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
   }
 
-  const isFallbackFailed = ref(false)
+  const fallback = reactive({
+    notFound: false,
+    index: false,
+  })
 
   // try to push the path, if not found, try to push the not found path
-  function tryPush(path: string, notFoundPath: ParallelPageOptions['notFoundPath'] = options.notFoundPath) {
+  function tryPush(path: string, fallbackRedirect = typeof options.fallback === 'object' && options.fallback.redirect) {
     function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
-      for (const _path of [path, ...fallbacks])
-        if (_path !== undefined && (options.disableFallback || hasPath(_path))) {
-          return parallelRouter.push(_path).then(() => {
-            isFallbackFailed.value = false
-          })
-        }
-      isFallbackFailed.value = true
+      if (options.fallback === false || hasPath(path))
+        return parallelRouter.push(path)
+
+      for (const _path of fallbacks)
+        if (_path !== undefined)
+          return parallelRouter.push(_path)
     }
-    return pushWithFallback(path, notFoundPath || undefined)
+
+    const push = pushWithFallback(path, fallbackRedirect || undefined)
+    if (push) {
+      return push.then(() => {
+        Object.assign(fallback, {
+          notFound: false,
+          index: false,
+        })
+      })
+    } else {
+      fallback.notFound = true
+    }
   }
 
   // sync the parallel router with the global router
@@ -131,13 +145,25 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     options.mode = sync ? 'sync' : 'manual'
   }
 
-  // initialize sync. if unable to resolve the sync path or if sync is disabled, push the default path.
-  if (options.mode === 'manual') {
-    if (options.manualSyncIndexPath)
-      await tryPush(options.manualSyncIndexPath)
-  } else {
-    await (sync() || (options.defaultPath && tryPush(options.defaultPath)))
+  async function init() {
+    if (options.mode === 'manual') {
+      if (options.index)
+        await parallelRouter.push(options.index)
+    } else {
+      const initSync = sync()
+      if (initSync)
+        await initSync
+      else {
+        if (options.index) {
+          await parallelRouter.push(options.index)
+        } else {
+          fallback.index = true
+        }
+      }
+    }
   }
+
+  await init()
 
   // sync parallel routers with the global router
   router.beforeResolve(async (to) => {
@@ -148,7 +174,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   return {
     ...parallelRouter,
     name,
-    isFallbackFailed,
+    fallback,
     hasPath,
     tryPush,
     sync,

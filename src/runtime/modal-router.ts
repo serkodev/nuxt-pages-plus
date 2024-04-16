@@ -1,12 +1,21 @@
 /* eslint-disable no-console */
 import { loadRouteLocation } from 'vue-router'
-import type { RouteLocationRaw } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import { defineNuxtPlugin, useRoute, useRouter } from '#app'
-import { computed, shallowRef } from '#imports'
+import { type Ref, computed, shallowRef } from '#imports'
 
 interface ModalPushRecord {
   id: string
   backgroundView: string
+}
+
+export interface ModalRouter {
+  route: Ref<RouteLocationNormalizedLoaded>
+  backgroundRoute: Ref<RouteLocationNormalizedLoaded | undefined>
+  currentStack: Ref<number[] | undefined>
+  close: (allGroups?: boolean) => void
+  push: (to: RouteLocationRaw, newGroup?: boolean) => ReturnType<Router['push']>
+  replace: (to: RouteLocationRaw) => ReturnType<Router['replace']>
 }
 
 export const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
@@ -113,7 +122,7 @@ export default defineNuxtPlugin(async (nuxt) => {
         close,
         push,
         replace,
-      },
+      } satisfies ModalRouter,
     },
   }
 })

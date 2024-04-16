@@ -3,16 +3,12 @@ export interface ParallelPageOptions {
   mode: 'sync' | 'sync-once' | 'manual'
 
   // default: undefined
-  manualSyncIndexPath?: string
+  index?: string
 
-  // default: '/~default'
-  defaultPath: string | false
-
-  // default: '/~not-found'
-  notFoundPath: string | false
-
-  // default: false
-  disableFallback: boolean
+  // default: true
+  fallback: boolean | {
+    redirect?: string
+  }
 }
 
 export interface PagesPlusOptions {
