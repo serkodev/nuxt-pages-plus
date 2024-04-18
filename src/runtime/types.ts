@@ -20,9 +20,3 @@ export interface ParallelRoute {
   name: string
   path: string
 }
-
-export interface ParallelPagePageMeta {
-  ignore?: boolean
-  name?: string
-  path?: string
-}
