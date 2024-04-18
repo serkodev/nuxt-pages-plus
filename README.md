@@ -10,7 +10,7 @@
 A Nuxt module that enables complex routing for Nuxt Pages.
 
 > [!IMPORTANT]
-> This project is in beta and under development. APIs and features may change without notice. Please do not use in production. Your suggestions and contributions are welcome! Feel free to submit issues or pull requests.
+> This project is in beta. APIs and features may change without notice. If you decide to use it in a production environment, please assess the risks on your own. Your suggestions and contributions are welcome! Feel free to submit issues or pull requests.
 
 ## Features
 
@@ -46,7 +46,7 @@ npx nuxi module add nuxt-pages-plus
 
 ## Documentation
 
-Please refer to the [Nuxt Pages Plus documentation](#) for detailed usage and examples.
+Please refer to the [Nuxt Pages Plus documentation](https://nuxt-pages-plus.pages.dev/) for detailed usage and examples.
 
 ## Contribution
 

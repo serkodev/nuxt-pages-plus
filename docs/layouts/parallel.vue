@@ -51,7 +51,7 @@ const relativePath = computed(() => {
       </div>
 
       <template #toolbar-items>
-        <a href="https://github.com/serkodev/nuxt-pages-plus/tree/docs/docs/pages/examples/parallel-routes" target="_blank">
+        <a href="https://github.com/serkodev/nuxt-pages-plus/tree/main/docs/pages/examples/parallel-routes" target="_blank">
           <button class="daisy-btn daisy-btn-xs text-nuxt">
             Source
           </button>
