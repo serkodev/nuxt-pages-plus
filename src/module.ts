@@ -37,5 +37,14 @@ export default defineNuxtModule<Partial<PagesPlusOptions>>({
         }
       }
     })
+
+    // remove parallel routes from prerender routes
+    nuxt.hook('prerender:routes', ({ routes }) => {
+      for (const route of Array.from(routes)) {
+        if (extractParallelRoutePath(route, options.separator)) {
+          routes.delete(route)
+        }
+      }
+    })
   },
 })
