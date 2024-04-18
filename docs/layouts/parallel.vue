@@ -4,6 +4,8 @@ const links = [
   { name: 'Hot', path: '/examples/parallel-routes/hot' },
 ]
 
+const router = useParallelRouter('left')
+
 const relativePath = computed(() => {
   return useRoute().path.replace(/^\/examples\/parallel-routes/, '') || '/'
 })
@@ -21,7 +23,7 @@ const relativePath = computed(() => {
               :to="link.path"
               role="tab"
               class="daisy-tab"
-              exact-active-class="daisy-tab-active"
+              :class="{ 'daisy-tab-active': link.path === router?.currentRoute.value.path }"
             >
               {{ link.name }}
             </NuxtLink>
