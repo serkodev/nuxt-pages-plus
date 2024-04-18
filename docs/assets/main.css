@@ -1,0 +1,15 @@
+.card-grid h2.title {
+    display: none !important;
+}
+
+.content p.description {
+    @apply !px-0;
+}
+
+.prose-image {
+    @apply ring-1 ring-neutral-200 dark:ring-neutral-800 rounded-lg;
+}
+
+.modal-wrapper {
+    @apply fixed top-0 left-0 w-full h-full backdrop-blur dark:bg-black/75 bg-white/75 z-50;
+}

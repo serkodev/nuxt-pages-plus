@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "type": "module",
+  "main": "./nuxt.config.ts",
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "daisyui": "^4.10.2",
+    "nuxt": "^3.11.2"
+  }
+}

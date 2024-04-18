@@ -1,7 +1,7 @@
 {
   "name": "nuxt-pages-plus",
   "version": "0.1.0-beta.1",
-  "description": "Nuxt pages plus",
+  "description": "A Nuxt module that enables complex routing for Nuxt Pages.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/serkodev/nuxt-pages-plus.git"
@@ -24,9 +24,11 @@
     "prepack": "nuxt-module-build build",
     "dev": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev",
     "dev:build": "nuxi build",
-    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base-utils && nuxi prepare examples/base",
     "play": "VITE_PAGES_PLUS_DEBUG=1 nuxi dev playground",
     "play:build": "nuxi build playground",
+    "docs:dev": "pnpm --dir docs dev",
+    "docs:build": "pnpm --dir docs build",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --prerelease=beta --no-output --release && npm publish --tag beta && git push --follow-tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

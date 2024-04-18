@@ -1,0 +1,20 @@
+{
+  "name": "@nuxt-pages-plus/docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi generate",
+    "preview": "nuxi preview",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@nuxt-themes/docus": "latest",
+    "@nuxt/devtools": "^1.0.8",
+    "@nuxt/eslint-config": "^0.2.0",
+    "@nuxtjs/tailwindcss": "^6.11.4",
+    "@types/node": "^20.11.24",
+    "eslint": "^8.57.0",
+    "nuxt": "^3.11.2"
+  }
+}
