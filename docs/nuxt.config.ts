@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@nuxt-themes/docus',
     resolve('../examples/base-utils'),
   ],
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   css: [
     resolve('./assets/main.css'),
   ],
@@ -25,5 +25,9 @@ export default defineNuxtConfig({
         '/examples/',
       ],
     },
+  },
+
+  pagesPath: {
+    basedPath: /examples\/[\w-]+\//,
   },
 })

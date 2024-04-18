@@ -2,7 +2,7 @@ import process from 'node:process'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 
 export default defineNuxtModule<{
-  basedPath: string
+  basedPath: string | RegExp
 }>({
   meta: {
     name: 'pages-path',
@@ -29,10 +29,18 @@ export default defineNuxtModule<{
 
         // find the first '/pages/' and remove everything before it
         const targetString = resolvedOptions.basedPath
-        const pagesIndex = filePath.indexOf(targetString)
-        if (pagesIndex !== -1) {
-          const pagesPath = filePath.slice(pagesIndex + targetString.length)
-          return code.replaceAll(MAGIC_COMMENT, pagesPath)
+        if (targetString instanceof RegExp) {
+          const match = filePath.match(targetString)
+          if (match && match.index) {
+            const pagesPath = filePath.slice(match.index + match[0].length)
+            return code.replaceAll(MAGIC_COMMENT, pagesPath)
+          }
+        } else {
+          const pagesIndex = filePath.indexOf(targetString)
+          if (pagesIndex !== -1) {
+            const pagesPath = filePath.slice(pagesIndex + targetString.length)
+            return code.replaceAll(MAGIC_COMMENT, pagesPath)
+          }
         }
 
         return code
