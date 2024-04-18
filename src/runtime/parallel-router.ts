@@ -3,7 +3,7 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import type { RouteLocationNormalizedLoaded, RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
 import { reactiveComputed } from '@vueuse/core'
-import type { PagesPlusOptions, ParallelPageOptions, ParallelPagePageMeta } from './types'
+import type { PagesPlusOptions, ParallelPageOptions } from './types'
 import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath, overrideRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'
@@ -33,17 +33,7 @@ export default defineNuxtPlugin(async () => {
     console.log('global router (before)', router.getRoutes())
 
   const parallelRoutes = router.getRoutes().reduce((acc, route) => {
-    const parallelPageMeta = (route.meta as { parallel?: ParallelPagePageMeta }).parallel ?? {}
-    if (parallelPageMeta.ignore)
-      return acc
-
-    const parallelRoutePath = overrideRoutePath(
-      extractParallelRoutePath(route.path, separator),
-      {
-        name: parallelPageMeta.name,
-        path: parallelPageMeta.path,
-      },
-    )
+    const parallelRoutePath = extractParallelRoutePath(route.path, separator)
 
     if (parallelRoutePath) {
       ; (acc[parallelRoutePath.name] ??= []).push({
