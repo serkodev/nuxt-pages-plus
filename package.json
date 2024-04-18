@@ -29,6 +29,7 @@
     "play:build": "nuxi build playground",
     "docs:dev": "pnpm --dir docs dev",
     "docs:build": "pnpm --dir docs build",
+    "docs:deploy": "pnpm dev:prepare && pnpm docs:build",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --prerelease=beta --no-output --release && npm publish --tag beta && git push --follow-tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

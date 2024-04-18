@@ -19,4 +19,11 @@ export default defineNuxtConfig({
 
   // XXX: temp fix for SSR crash for content including table & code block when development
   ssr: process.env.NODE_ENV === 'production',
+  nitro: {
+    prerender: {
+      ignore: [
+        '/examples/',
+      ],
+    },
+  },
 })
