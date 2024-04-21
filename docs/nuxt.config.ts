@@ -30,4 +30,14 @@ export default defineNuxtConfig({
   pagesPath: {
     basedPath: /examples\/[\w-]+\//,
   },
+
+  pagesPlus: {
+    parallelPages: {
+      left: {
+        // this config is for demo in docs only
+        // the index default value is '/~index' so usually you don't need to set it in your project
+        index: '/examples/parallel-routes/~index',
+      },
+    },
+  },
 })

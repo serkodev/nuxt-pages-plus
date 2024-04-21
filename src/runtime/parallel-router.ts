@@ -77,6 +77,7 @@ export default defineNuxtPlugin(async () => {
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
     mode: 'sync',
+    index: '/~index',
     fallback: true,
   } satisfies ParallelPageOptions)
 
@@ -136,19 +137,23 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   }
 
   async function init() {
+    async function tryIndex() {
+      const pushIndex = options.index && tryPush(options.index)
+      if (pushIndex) {
+        await pushIndex
+      } else {
+        fallback.index = true
+      }
+    }
+
     if (options.mode === 'manual') {
-      if (options.index)
-        await parallelRouter.push(options.index)
+      await tryIndex()
     } else {
       const initSync = sync()
       if (initSync)
         await initSync
       else {
-        if (options.index) {
-          await parallelRouter.push(options.index)
-        } else {
-          fallback.index = true
-        }
+        await tryIndex()
       }
     }
   }

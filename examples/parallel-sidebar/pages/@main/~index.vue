@@ -1,5 +1,5 @@
 <template>
   <ExampleView label="$__PAGES_PATH__">
-    default fallback path
+    @main index fallback
   </ExampleView>
 </template>
