@@ -1,19 +1,17 @@
 import { addComponentsDir, addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
-import { defu } from 'defu'
 import { extractParallelRoutePath } from './runtime/utils'
 import type { PagesPlusOptions } from './runtime/types'
 
-export default defineNuxtModule<Partial<PagesPlusOptions>>({
+export default defineNuxtModule<PagesPlusOptions>({
   meta: {
     name: 'nuxt-pages-plus',
     configKey: 'pagesPlus',
   },
-  setup(resolvedOptions, nuxt) {
-    const options = defu(resolvedOptions, {
-      separator: '@',
-      parallelPages: {},
-    } satisfies PagesPlusOptions)
-
+  defaults: {
+    separator: '@',
+    parallelPages: {},
+  },
+  setup(options, nuxt) {
     const resolver = createResolver(import.meta.url)
 
     addPlugin(resolver.resolve('./runtime/parallel-router'))
