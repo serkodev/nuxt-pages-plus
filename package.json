@@ -1,6 +1,6 @@
 {
   "name": "nuxt-pages-plus",
-  "version": "0.3.0-beta.1",
+  "version": "0.3.1",
   "description": "A Nuxt module that enables complex routing for Nuxt Pages.",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "docs:dev": "pnpm --dir docs dev",
     "docs:build": "pnpm --dir docs build",
     "docs:deploy": "pnpm dev:prepare && pnpm docs:build",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --prerelease=beta --no-output --release && npm publish --tag beta && git push --follow-tags",
+    "release": "npm run lint && npm run test && npm run prepack && changelogen --no-output --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
