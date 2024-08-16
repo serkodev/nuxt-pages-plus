@@ -9,9 +9,6 @@
 
 A Nuxt module that enables complex routing for Nuxt Pages.
 
-> [!IMPORTANT]
-> This project is in beta. APIs and features may change without notice. If you decide to use it in a production environment, please assess the risks on your own. Your suggestions and contributions are welcome! Feel free to submit issues or pull requests.
-
 ## Features
 
 - 🛤️ &nbsp;Parallel Routes - Render multiple pages in a single route, synchronously or manually.
