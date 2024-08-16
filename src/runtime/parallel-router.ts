@@ -109,9 +109,10 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
       if (options.fallback === false || hasPath(path))
         return parallelRouter.push(path)
 
-      for (const _path of fallbacks)
+      for (const _path of fallbacks) {
         if (_path !== undefined)
           return parallelRouter.push(_path)
+      }
     }
 
     const push = pushWithFallback(path, fallbackRedirect || undefined)
@@ -150,9 +151,9 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
       await tryIndex()
     } else {
       const initSync = sync()
-      if (initSync)
+      if (initSync) {
         await initSync
-      else {
+      } else {
         await tryIndex()
       }
     }
