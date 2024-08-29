@@ -2,3 +2,6 @@ packages:
   - docs
   - playground
   - examples/*
+
+catalog:
+  nuxt: ^3.13.0

@@ -5,6 +5,6 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "daisyui": "^4.10.2",
-    "nuxt": "^3.11.2"
+    "nuxt": "catalog:"
   }
 }

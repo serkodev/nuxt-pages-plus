@@ -53,9 +53,9 @@
     "@types/node": "^20.14.15",
     "changelogen": "^0.5.5",
     "eslint": "^8.57.0",
-    "nuxt": "^3.12.4",
+    "nuxt": "catalog:",
     "vitest": "^1.6.0",
     "vue-router": "^4.4.3"
   },
-  "packageManager": "pnpm@8.15.9"
+  "packageManager": "pnpm@9.9.0"
 }
