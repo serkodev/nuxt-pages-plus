@@ -38,19 +38,19 @@
     "prepare:all": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.12.4",
-    "@vueuse/core": "^10.11.1",
+    "@nuxt/kit": "^3.13.0",
+    "@vueuse/core": "^11.0.3",
     "defu": "^6.1.4",
     "ufo": "^1.5.4"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.26.0",
+    "@antfu/eslint-config": "^2.27.3",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint-config": "^0.2.0",
-    "@nuxt/module-builder": "^0.5.5",
-    "@nuxt/schema": "^3.12.4",
+    "@nuxt/module-builder": "^0.8.3",
+    "@nuxt/schema": "^3.13.0",
     "@nuxt/test-utils": "^3.14.1",
-    "@types/node": "^20.14.15",
+    "@types/node": "^20.16.2",
     "changelogen": "^0.5.5",
     "eslint": "^8.57.0",
     "nuxt": "catalog:",
