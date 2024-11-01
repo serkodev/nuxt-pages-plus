@@ -1,6 +1,6 @@
 {
   "name": "nuxt-pages-plus",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A Nuxt module that enables complex routing for Nuxt Pages.",
   "repository": {
     "type": "git",
