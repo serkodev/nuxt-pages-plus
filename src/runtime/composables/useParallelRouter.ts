@@ -1,18 +1,19 @@
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router'
 import type { ParallelRouter } from '../parallel-router'
 import { ParallelRouterSymbol } from '../symbols'
 import { useNuxtApp, useRoute, useRouter } from '#app'
-import { inject, unref } from '#imports'
+import { type Ref, inject, toRef, unref } from '#imports'
 
-export function useParentRouterName() {
-  return inject(ParallelRouterSymbol, undefined)
+export function useParentRouterName(): Ref<string | undefined> {
+  const symbol = inject(ParallelRouterSymbol, undefined)
+  return toRef(symbol)
 }
 
-export function useParentRouter() {
+export function useParentRouter(): Router {
   return useParallelRouter() ?? useRouter()
 }
 
-export function useParentRoute() {
+export function useParentRoute(): RouteLocationNormalizedLoadedGeneric {
   return useParallelRoute() ?? useRoute()
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { loadRouteLocation } from 'vue-router'
-import type { RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router } from 'vue-router'
 import { defineNuxtPlugin, useRoute, useRouter } from '#app'
 import { type Ref, computed, shallowRef } from '#imports'
 
@@ -10,8 +10,8 @@ interface ModalPushRecord {
 }
 
 export interface ModalRouter {
-  route: Ref<RouteLocationNormalizedLoaded>
-  backgroundRoute: Ref<RouteLocationNormalizedLoaded | undefined>
+  route: Ref<RouteLocationNormalizedLoaded | RouteLocationResolved>
+  backgroundRoute: Ref<RouteLocationResolved | undefined>
   stacks: Ref<number[] | undefined>
   close: (allOpened?: boolean) => void
   push: (to: RouteLocationRaw, open?: boolean) => ReturnType<Router['push']>
