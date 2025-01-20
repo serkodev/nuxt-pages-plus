@@ -3,7 +3,7 @@
   "type": "module",
   "main": "./nuxt.config.ts",
   "dependencies": {
-    "@nuxt/ui": "^2.18.4",
+    "@nuxt/ui": "^2.21.0",
     "nuxt": "catalog:"
   }
 }
