@@ -3,7 +3,7 @@ const links = [1, 2, 3, 4, 5].map((i) => {
   return {
     label: `Topic ${i}`,
     icon: 'i-heroicons-document',
-    to: `/topic/${i}`,
+    to: `/topic/${i}?foo=f${i}`,
   }
 })
 </script>
