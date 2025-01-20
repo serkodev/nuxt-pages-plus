@@ -14,6 +14,9 @@ export interface ParallelPageOptions {
 export interface PagesPlusOptions {
   separator: string
   parallelPages: Record<string, Partial<ParallelPageOptions>>
+  experimental?: {
+    parallelPageMetaKey?: boolean
+  }
 }
 
 export interface ParallelRoute {

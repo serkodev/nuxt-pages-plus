@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { viewDepthKey } from 'vue-router'
 import { ParallelRouterSymbol } from '../symbols'
+import type { PagesPlusOptions } from '../types'
 import { computed, inject, provide, unref, useParallelRouter } from '#imports'
+import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
 
 const props = defineProps<{
   // Unique name of the parallel router
@@ -19,6 +21,8 @@ const slots = defineSlots<{
   'index': () => any
 }>()
 
+const { experimental } = pagesPlusOptions as unknown as PagesPlusOptions
+
 const parentRouterName = inject(ParallelRouterSymbol, undefined)
 
 const routerName = computed(() => {
@@ -31,6 +35,16 @@ provide(ParallelRouterSymbol, routerName)
 
 const router = computed(() => useParallelRouter(routerName.value))
 const route = computed(() => router.value?.currentRoute.value)
+
+const routerKey = experimental?.parallelPageMetaKey
+  ? computed(() => {
+    if (!route.value)
+      return
+
+    const source = route.value?.meta.key
+    return typeof source === 'function' ? source(route.value) : undefined
+  })
+  : undefined
 
 const fallbackSlot = computed(() => {
   if (props.hideFallback)
@@ -51,6 +65,7 @@ const hide = computed(() => {
   </div>
   <RouterView
     v-else-if="router && !hide"
+    :key="routerKey"
     :name="routerViewName"
     :route="route"
     v-bind="$attrs"
