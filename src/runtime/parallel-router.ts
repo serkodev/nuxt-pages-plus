@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { createMemoryHistory, createRouter } from 'vue-router'
-import type { RouteLocationNormalizedLoaded, RouteRecord, Router } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteRecord, Router } from 'vue-router'
 import { defu } from 'defu'
 import { reactiveComputed } from '@vueuse/core'
 import type { PagesPlusOptions, ParallelPageOptions } from './types'
@@ -16,8 +16,8 @@ export interface ParallelRouter extends Router {
     notFound: boolean
     index: boolean
   }
-  hasPath: (path: string) => boolean
-  tryPush: (path: string, fallbackRedirect?: string) => ReturnType<Router['push']> | undefined
+  hasPath: (path: string | RouteLocationRaw) => boolean
+  tryPush: (route: RouteLocationRaw, fallbackRedirect?: string) => ReturnType<Router['push']> | undefined
   sync: () => ReturnType<Router['push']> | undefined
   setSync: (sync: boolean) => void
 }
@@ -94,8 +94,9 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     component: { render: () => undefined },
   })
 
-  function hasPath(path: string) {
-    return parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
+  function hasPath(route: string | RouteLocationRaw) {
+    const path = typeof route === 'string' ? route : route.path
+    return path === undefined ? false : parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
   }
 
   const fallback = reactive({
@@ -104,10 +105,18 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   })
 
   // try to push the path, if not found, try to push the not found path
-  function tryPush(path: string, fallbackRedirect = typeof options.fallback === 'object' && options.fallback.redirect) {
-    function pushWithFallback(path: string, ...fallbacks: (string | undefined)[]) {
-      if (options.fallback === false || hasPath(path))
-        return parallelRouter.push(path)
+  function tryPush(route: RouteLocationRaw, fallbackRedirect = typeof options.fallback === 'object' && options.fallback.redirect) {
+    const normalizedRoute = typeof route === 'string'
+      ? route
+      : {
+        path: route.path,
+        query: route.query,
+        hash: route.hash,
+      } satisfies RouteLocationRaw
+
+    function pushWithFallback(route: RouteLocationRaw, ...fallbacks: (string | undefined)[]) {
+      if (options.fallback === false || hasPath(route))
+        return parallelRouter.push(route)
 
       for (const _path of fallbacks) {
         if (_path !== undefined)
@@ -115,7 +124,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
       }
     }
 
-    const push = pushWithFallback(path, fallbackRedirect || undefined)
+    const push = pushWithFallback(normalizedRoute, fallbackRedirect || undefined)
     if (push) {
       return push.then(() => {
         Object.assign(fallback, {
@@ -130,7 +139,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
 
   // sync the parallel router with the global router
   function sync() {
-    return tryPush(router.currentRoute.value.path)
+    return tryPush(router.currentRoute.value)
   }
 
   function setSync(sync: boolean) {
@@ -164,7 +173,7 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
   // sync parallel routers with the global router
   router.beforeResolve(async (to) => {
     if (options.mode === 'sync')
-      await tryPush(to.path)
+      await tryPush(to)
   })
 
   return {
