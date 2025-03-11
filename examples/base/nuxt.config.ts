@@ -12,4 +12,7 @@ export default defineNuxtConfig({
   css: [
     resolve('./assets/main.css'),
   ],
+  typescript: {
+    typeCheck: 'build',
+  },
 })
