@@ -22,7 +22,7 @@ export interface ParallelRouter extends Router {
   setSync: (sync: boolean) => void
 }
 
-const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
+const DEBUG = false
 
 export default defineNuxtPlugin(async () => {
   const router = useRouter()

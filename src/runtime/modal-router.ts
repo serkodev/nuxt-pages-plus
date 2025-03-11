@@ -18,7 +18,7 @@ export interface ModalRouter {
   replace: (to: RouteLocationRaw) => ReturnType<Router['replace']>
 }
 
-export const DEBUG = import.meta.dev && import.meta.client && import.meta.env.VITE_PAGES_PLUS_DEBUG
+const DEBUG = false
 
 export default defineNuxtPlugin(async (nuxt) => {
   const router = useRouter()
