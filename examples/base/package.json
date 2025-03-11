@@ -3,7 +3,10 @@
   "type": "module",
   "main": "./nuxt.config.ts",
   "dependencies": {
-    "@nuxt/ui": "^2.21.0",
+    "@nuxt/ui": "^2.21.1",
     "nuxt": "catalog:"
+  },
+  "devDependencies": {
+    "vue-tsc": "^2.2.8"
   }
 }
