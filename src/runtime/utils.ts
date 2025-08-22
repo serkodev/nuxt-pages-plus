@@ -1,5 +1,5 @@
-import { encodePath } from 'ufo'
 import type { ParallelRoute } from './types'
+import { encodePath } from 'ufo'
 
 function splitParallelPath(path: string, separator: string): [string[], string[]] {
   return path.split('/').reduce<[string[], string[]]>(
