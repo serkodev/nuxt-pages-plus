@@ -39,7 +39,7 @@
     "prepare:all": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.16.0",
+    "@nuxt/kit": "catalog:nuxt",
     "@vueuse/core": "^13.0.0",
     "defu": "^6.1.4",
     "ufo": "^1.5.4"
@@ -49,12 +49,12 @@
     "@nuxt/devtools": "^2.2.1",
     "@nuxt/eslint-config": "^0.2.0",
     "@nuxt/module-builder": "^0.8.4",
-    "@nuxt/schema": "^3.16.0",
+    "@nuxt/schema": "catalog:nuxt",
     "@nuxt/test-utils": "^3.17.2",
     "@types/node": "^20.17.14",
     "bumpp": "^9.10.1",
     "eslint": "^8.57.1",
-    "nuxt": "catalog:",
+    "nuxt": "catalog:nuxt",
     "typescript": "~5.6.3",
     "vitest": "^1.6.0",
     "vue-router": "^4.5.0"
@@ -62,5 +62,5 @@
   "peerDependencies": {
     "nuxt": ">=3.16.0"
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@10.15.0"
 }

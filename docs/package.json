@@ -16,6 +16,6 @@
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@types/node": "^20.17.14",
     "eslint": "^8.57.1",
-    "nuxt": "catalog:"
+    "nuxt": "catalog:nuxt"
   }
 }
