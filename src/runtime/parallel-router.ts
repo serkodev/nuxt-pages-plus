@@ -95,9 +95,20 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     component: { render: () => undefined },
   })
 
-  function hasPath(route: string | RouteLocationRaw) {
+  function resolvePath(route: string | RouteLocationRaw): RouteLocationResolved | undefined {
     const path = typeof route === 'string' ? route : route.path
-    return path === undefined ? false : parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
+    if (path === undefined)
+      return undefined
+
+    const resolved = parallelRouter.resolve(path)
+    if (resolved.name === ParallelRouteNotFoundSymbol)
+      return undefined
+
+    return resolved
+  }
+
+  function hasPath(route: string | RouteLocationRaw) {
+    return resolvePath(route) !== undefined
   }
 
   const fallback = reactive({
