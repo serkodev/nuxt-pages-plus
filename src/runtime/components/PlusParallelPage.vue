@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { PagesPlusOptions } from '../types'
+import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
+import { computed, inject, provide, unref, useParallelRouter } from '#imports'
 import { viewDepthKey } from 'vue-router'
 import { ParallelRouterSymbol } from '../symbols'
-import type { PagesPlusOptions } from '../types'
-import { computed, inject, provide, unref, useParallelRouter } from '#imports'
-import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
 
 const props = defineProps<{
   // Unique name of the parallel router
@@ -38,12 +38,12 @@ const route = computed(() => router.value?.currentRoute.value)
 
 const routerKey = experimental?.parallelPageMetaKey
   ? computed(() => {
-    if (!route.value)
-      return
+      if (!route.value)
+        return
 
-    const source = route.value?.meta.key
-    return typeof source === 'function' ? source(route.value) : undefined
-  })
+      const source = route.value?.meta.key
+      return typeof source === 'function' ? source(route.value) : undefined
+    })
   : undefined
 
 const fallbackSlot = computed(() => {

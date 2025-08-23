@@ -8,6 +8,6 @@
     "preview": "nuxt preview"
   },
   "dependencies": {
-    "nuxt": "catalog:"
+    "nuxt": "catalog:nuxt"
   }
 }

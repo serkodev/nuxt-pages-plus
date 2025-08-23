@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-import { loadRouteLocation } from 'vue-router'
+import type { Ref } from '#imports'
 import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router } from 'vue-router'
 import { defineNuxtPlugin, useRoute, useRouter } from '#app'
-import { type Ref, computed, shallowRef } from '#imports'
+import { computed, shallowRef } from '#imports'
+import { loadRouteLocation } from 'vue-router'
 
 interface ModalPushRecord {
   id: string
