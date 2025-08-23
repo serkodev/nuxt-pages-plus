@@ -1,0 +1,34 @@
+name: 🐞 Bug Report
+description: Report an issue
+labels: [bug]
+body:
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: Clearly describe the bug. If you plan to submit a PR, please mention it. Thanks!
+      placeholder: Bug description
+    validations:
+      required: true
+  - type: input
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Please provide a [StackBlitz](https://stackblitz.com/github/nuxt/starter/tree/v4?file=README.md) link or a repo that reproduces the issue. A [minimal reproduction](https://stackoverflow.com/help/minimal-reproducible-example) is required.
+      placeholder: Reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Output of `npx envinfo --system --npmPackages '{vue,nuxt,nuxt-pages-plus}' --binaries --browsers`
+      render: Shell
+      placeholder: System, Binaries, Browsers
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Would you like to work on this issue?
+      options:
+        - label: I'm interested in working on this issue
