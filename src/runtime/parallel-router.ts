@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import type { RouteLocationNormalizedLoaded, RouteLocationRaw, Router, RouteRecord } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router, RouteRecord } from 'vue-router'
 import type { PagesPlusOptions, ParallelPageOptions } from './types'
 import { defineNuxtPlugin, useRouter } from '#app'
 import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
@@ -77,6 +77,7 @@ export default defineNuxtPlugin(async () => {
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
     mode: 'sync',
+    sync: 'pre',
     index: '/~index',
     fallback: true,
   } satisfies ParallelPageOptions)
@@ -172,8 +173,13 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
 
   // sync parallel routers with the global router
   router.beforeResolve(async (to) => {
-    if (options.mode === 'sync')
+    if (options.sync === 'pre' && options.mode === 'sync')
       await tryPush(to)
+  })
+
+  router.afterEach((to) => {
+    if (options.sync === 'post' && options.mode === 'sync')
+      tryPush(to)
   })
 
   return {
