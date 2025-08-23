@@ -2,6 +2,9 @@
   "private": true,
   "type": "module",
   "main": "./nuxt.config.ts",
+  "scripts": {
+    "prepare:types": "nuxt prepare"
+  },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
     "daisyui": "^4.12.24",

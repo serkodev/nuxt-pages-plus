@@ -35,7 +35,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "prepare:all": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare"
+    "prepare:types": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare:types"
   },
   "dependencies": {
     "@nuxt/kit": "catalog:nuxt",
