@@ -6,7 +6,8 @@ import { computed, useModalRouter } from '#imports'
 const props = withDefaults(defineProps<NuxtLinkProps & {
   open?: boolean
 }>(), {
-  open: false,
+  noRel: undefined,
+  noPrefetch: undefined,
 })
 
 const url = computed(() => props.to || props.href)
