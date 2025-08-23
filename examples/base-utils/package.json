@@ -3,8 +3,8 @@
   "type": "module",
   "main": "./nuxt.config.ts",
   "dependencies": {
-    "@faker-js/faker": "^8.4.1",
-    "daisyui": "^4.12.23",
+    "@faker-js/faker": "^9.9.0",
+    "daisyui": "^4.12.24",
     "nuxt": "catalog:nuxt"
   }
 }
