@@ -1,0 +1,195 @@
+diff --git a/dist/browser/chunk-EY3HFMUH.js b/dist/browser/chunk-EY3HFMUH.js
+index ade4f71d723e32a1cb07623707f8d1805b4a9a24..457f59be85f2a236d4848cbb1ef5b4ca87659ff4 100644
+--- a/dist/browser/chunk-EY3HFMUH.js
++++ b/dist/browser/chunk-EY3HFMUH.js
+@@ -303,7 +303,7 @@ ${o}
+ 
+ `;return t+=`export const GeneratedPinceauThemeSchema = typeof schema
+ 
+-`,t}var tn=(r={},t=[],e={})=>{let i=`import { PinceauTheme, PropertyValue } from 'pinceau'
++`,t}var tn=(r={},t=[],e={})=>{let i=`import type { PinceauTheme, PropertyValue } from 'pinceau'
+ `;return i+=t.filter(Boolean).join(`
+ `),i+=`
+ ${mM(r,e)}`,i+=`export const utils = ${Object.keys(r).length?`{ ${Object.keys(r).join(", ")} }`:"undefined"}
+diff --git a/dist/shared/pinceau.0a86d563.cjs b/dist/shared/pinceau.0a86d563.cjs
+index 45092a1aa3bfb71542197dfb53b36c751beda64f..6bea0051f0eca3db34761a5406503c2e1412dcb3 100644
+--- a/dist/shared/pinceau.0a86d563.cjs
++++ b/dist/shared/pinceau.0a86d563.cjs
+@@ -809,7 +809,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.0a9fe958.cjs b/dist/shared/pinceau.0a9fe958.cjs
+index e3a1b2dae54b361591f111dc4812aa249841e89f..b38ce56bfce12f2664d3eb69fd3493623d83a1e6 100644
+--- a/dist/shared/pinceau.0a9fe958.cjs
++++ b/dist/shared/pinceau.0a9fe958.cjs
+@@ -806,7 +806,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.0f6866fc.mjs b/dist/shared/pinceau.0f6866fc.mjs
+index 55f04772dc6bc5b102596ee8487fecde2d716ced..f65ae9abe68cdb7f0633ac605e5a6695f38a0ed9 100644
+--- a/dist/shared/pinceau.0f6866fc.mjs
++++ b/dist/shared/pinceau.0f6866fc.mjs
+@@ -796,7 +796,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.2e757599.cjs b/dist/shared/pinceau.2e757599.cjs
+index ec1ac328cc442e0428bb2f1e1bdb799fbb8be303..a1a44b81da6f0a65246893501eb59c6a1c66feee 100644
+--- a/dist/shared/pinceau.2e757599.cjs
++++ b/dist/shared/pinceau.2e757599.cjs
+@@ -809,7 +809,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.482be1ac.cjs b/dist/shared/pinceau.482be1ac.cjs
+index abda3af60f1971063da4725f5406a001624dbb04..bfe2c25089de03bb36758884e93073de1fddfa35 100644
+--- a/dist/shared/pinceau.482be1ac.cjs
++++ b/dist/shared/pinceau.482be1ac.cjs
+@@ -806,7 +806,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.607ad4be.mjs b/dist/shared/pinceau.607ad4be.mjs
+index eddc8e7c247b5af25bd4528cc1eb8038cfecc586..697bafaddc07f53f747e11a37160c57c294f7c9e 100644
+--- a/dist/shared/pinceau.607ad4be.mjs
++++ b/dist/shared/pinceau.607ad4be.mjs
+@@ -798,7 +798,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.6f7ae971.cjs b/dist/shared/pinceau.6f7ae971.cjs
+index e0d0517dfe3b92930da3057ab6173aeb7ff084af..c738cbd191ca3c00a4cd76c69e96cc6760268357 100644
+--- a/dist/shared/pinceau.6f7ae971.cjs
++++ b/dist/shared/pinceau.6f7ae971.cjs
+@@ -796,7 +796,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ const utilsFull = (utils = {}, utilsImports = [], definitions = {}) => {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.8be2f18d.cjs b/dist/shared/pinceau.8be2f18d.cjs
+index c09422a806332958c549ecb367e3b4ec9d7a97a1..abda78543bea2ae94e3822980a9ba08fa7a2f3b2 100644
+--- a/dist/shared/pinceau.8be2f18d.cjs
++++ b/dist/shared/pinceau.8be2f18d.cjs
+@@ -805,7 +805,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.8e815bf8.mjs b/dist/shared/pinceau.8e815bf8.mjs
+index 2834d7de9cde4d00f43dae0ef167db69ac2ec8e9..3dbf685f47aeebf6c12faca673cb07f5b0e0b60f 100644
+--- a/dist/shared/pinceau.8e815bf8.mjs
++++ b/dist/shared/pinceau.8e815bf8.mjs
+@@ -795,7 +795,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.95a00457.mjs b/dist/shared/pinceau.95a00457.mjs
+index 81bb426a694a4422aa49b2f62018a5165413e9c6..b615164a379bec782bcd8631518a277951360e8a 100644
+--- a/dist/shared/pinceau.95a00457.mjs
++++ b/dist/shared/pinceau.95a00457.mjs
+@@ -799,7 +799,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.aa6b702d.mjs b/dist/shared/pinceau.aa6b702d.mjs
+index 3a1177864f3a8d113241310f3ff015a672aa5a9b..508031d2f3ad3c6ef232cff7ccbb21048385e703 100644
+--- a/dist/shared/pinceau.aa6b702d.mjs
++++ b/dist/shared/pinceau.aa6b702d.mjs
+@@ -794,7 +794,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ const utilsFull = (utils = {}, utilsImports = [], definitions = {}) => {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.b6267d71.mjs b/dist/shared/pinceau.b6267d71.mjs
+index ef2343d215386ee80fd677e05a510975486e0a98..f3bb5be5049812786017674189af88d801f25402 100644
+--- a/dist/shared/pinceau.b6267d71.mjs
++++ b/dist/shared/pinceau.b6267d71.mjs
+@@ -799,7 +799,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.be44ec08.cjs b/dist/shared/pinceau.be44ec08.cjs
+index fca0d7ca52260ac0bcefcec36adace845aa7b1d4..b225e34867e7f4bb5d7e7d5db3ff52b866466a30 100644
+--- a/dist/shared/pinceau.be44ec08.cjs
++++ b/dist/shared/pinceau.be44ec08.cjs
+@@ -808,7 +808,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
+diff --git a/dist/shared/pinceau.f6d83c29.mjs b/dist/shared/pinceau.f6d83c29.mjs
+index be2092ce997c34ab0d2a046698bd7acb987ca82e..315a01c9476f971786ab62918952990867dc8d54 100644
+--- a/dist/shared/pinceau.f6d83c29.mjs
++++ b/dist/shared/pinceau.f6d83c29.mjs
+@@ -795,7 +795,7 @@ function schemaFull(schema) {
+   return result;
+ }
+ function utilsFull(utils = {}, utilsImports = [], definitions = {}) {
+-  let result = "import { PinceauTheme, PropertyValue } from 'pinceau'\n";
++  let result = "import type { PinceauTheme, PropertyValue } from 'pinceau'\n";
+   result += utilsImports.filter(Boolean).join("\n");
+   result += `
+ ${stringifyUtils(utils, definitions)}`;
