@@ -2,11 +2,14 @@
   "private": true,
   "type": "module",
   "main": "./nuxt.config.ts",
+  "scripts": {
+    "prepare:types": "nuxt prepare"
+  },
   "dependencies": {
-    "@nuxt/ui": "^2.21.1",
-    "nuxt": "catalog:"
+    "@nuxt/ui": "^2.22.1",
+    "nuxt": "catalog:nuxt"
   },
   "devDependencies": {
-    "vue-tsc": "^2.2.8"
+    "vue-tsc": "^3.0.6"
   }
 }

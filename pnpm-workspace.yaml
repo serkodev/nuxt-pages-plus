@@ -2,5 +2,14 @@ packages:
   - docs
   - playground
   - examples/*
-catalog:
-  nuxt: ^3.16.0
+
+catalogs:
+  dev:
+    '@antfu/eslint-config': ^5.2.1
+    '@nuxt/eslint-config': ^1.9.0
+    eslint: ^9.34.0
+    typescript: ~5.9.2
+  nuxt:
+    '@nuxt/kit': ^3.18.1
+    '@nuxt/schema': ^3.18.1
+    nuxt: ^3.18.1

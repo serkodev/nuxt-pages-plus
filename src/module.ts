@@ -1,6 +1,6 @@
+import type { PagesPlusOptions } from './runtime/types'
 import { addComponentsDir, addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { extractParallelRoutePath } from './runtime/utils'
-import type { PagesPlusOptions } from './runtime/types'
 
 export default defineNuxtModule<PagesPlusOptions>({
   meta: {

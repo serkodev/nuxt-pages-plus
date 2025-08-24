@@ -5,9 +5,10 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview",
+    "prepare:types": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "catalog:"
+    "nuxt": "catalog:nuxt"
   }
 }

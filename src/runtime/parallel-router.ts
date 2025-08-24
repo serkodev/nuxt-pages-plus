@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
-import { createMemoryHistory, createRouter } from 'vue-router'
-import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteRecord, Router } from 'vue-router'
-import { defu } from 'defu'
-import { reactiveComputed } from '@vueuse/core'
+import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router, RouteRecord } from 'vue-router'
 import type { PagesPlusOptions, ParallelPageOptions } from './types'
-import { ParallelRouteNotFoundSymbol } from './symbols'
-import { extractParallelRoutePath } from './utils'
 import { defineNuxtPlugin, useRouter } from '#app'
 import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
 import { reactive } from '#imports'
+import { reactiveComputed } from '@vueuse/core'
+import { defu } from 'defu'
+import { createMemoryHistory, createRouter } from 'vue-router'
+import { ParallelRouteNotFoundSymbol } from './symbols'
+import { extractParallelRoutePath } from './utils'
 
 export interface ParallelRouter extends Router {
   name?: string
@@ -77,6 +77,7 @@ export default defineNuxtPlugin(async () => {
 async function createParallelRouter(name: string, routes: RouteRecord[], router: Router, parallelPageOptions: Partial<ParallelPageOptions>): Promise<ParallelRouter> {
   const options = defu(parallelPageOptions, {
     mode: 'sync',
+    sync: 'pre',
     index: '/~index',
     fallback: true,
   } satisfies ParallelPageOptions)
@@ -94,9 +95,20 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
     component: { render: () => undefined },
   })
 
-  function hasPath(route: string | RouteLocationRaw) {
+  function resolvePath(route: string | RouteLocationRaw): RouteLocationResolved | undefined {
     const path = typeof route === 'string' ? route : route.path
-    return path === undefined ? false : parallelRouter.resolve(path)?.name !== ParallelRouteNotFoundSymbol
+    if (path === undefined)
+      return undefined
+
+    const resolved = parallelRouter.resolve(path)
+    if (resolved.name === ParallelRouteNotFoundSymbol)
+      return undefined
+
+    return resolved
+  }
+
+  function hasPath(route: string | RouteLocationRaw) {
+    return resolvePath(route) !== undefined
   }
 
   const fallback = reactive({
@@ -172,8 +184,13 @@ async function createParallelRouter(name: string, routes: RouteRecord[], router:
 
   // sync parallel routers with the global router
   router.beforeResolve(async (to) => {
-    if (options.mode === 'sync')
+    if (options.sync === 'pre' && options.mode === 'sync')
       await tryPush(to)
+  })
+
+  router.afterEach((to) => {
+    if (options.sync === 'post' && options.mode === 'sync')
+      tryPush(to)
   })
 
   return {

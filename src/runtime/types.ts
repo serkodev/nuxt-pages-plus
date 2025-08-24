@@ -2,6 +2,9 @@ export interface ParallelPageOptions {
   // default: 'sync'
   mode: 'sync' | 'sync-once' | 'manual'
 
+  // default: 'pre'
+  sync: 'pre' | 'post'
+
   // default: '/~index'
   index?: string
 
