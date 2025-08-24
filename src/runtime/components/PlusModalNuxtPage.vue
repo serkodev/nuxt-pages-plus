@@ -5,12 +5,14 @@ import { computed, useModalRouter } from '#imports'
 
 const props = defineProps<NuxtPageProps>()
 
-const route = computed(() => (useModalRouter().backgroundRoute.value || props.route) as NuxtPageProps['route'])
+const { route: modalRoute, layout } = useModalRouter()
+
+const route = computed(() => (modalRoute.value || props.route) as NuxtPageProps['route'])
 </script>
 
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-  <slot :route="route">
+  <slot :route="route" :layout="layout">
     <NuxtPage v-bind="{ ...$attrs, ...props, route }" />
   </slot>
 </template>

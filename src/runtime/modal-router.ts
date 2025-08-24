@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
-import type { Ref } from '#imports'
-import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router } from 'vue-router'
-import { defineNuxtPlugin, useRoute, useRouter } from '#app'
+import type { PageMeta } from '#app'
+import type { ComputedRef } from '#imports'
+import type { Router } from 'vue-router'
+import { defineNuxtPlugin } from '#app'
 import { computed, shallowRef } from '#imports'
-import { loadRouteLocation } from 'vue-router'
+import { loadRouteLocation, useRouter } from 'vue-router'
 
 interface ModalPushRecord {
   id: string
@@ -11,12 +12,42 @@ interface ModalPushRecord {
 }
 
 export interface ModalRouter {
-  route: Ref<RouteLocationNormalizedLoaded | RouteLocationResolved>
-  backgroundRoute: Ref<RouteLocationResolved | undefined>
-  stacks: Ref<number[] | undefined>
+  /**
+   * the route of the background view of the modal
+   */
+  route: ComputedRef<ReturnType<Router['resolve']> | undefined>
+
+  /**
+   * returns the layout of the modal route view when the modal is opened
+   * must pass to NuxtLayout to prevent using wrong layout from parallel routes
+   */
+  layout: ComputedRef<PageMeta['layout']>
+
+  /**
+   * the opened stacks count of the modal view
+   */
+  stacks: ComputedRef<number[] | undefined>
+
+  /**
+   * Close the modal
+   * @param allOpened whether to close all opened modals
+   */
   close: (allOpened?: boolean) => void
-  push: (to: RouteLocationRaw, open?: boolean) => ReturnType<Router['push']>
-  replace: (to: RouteLocationRaw) => ReturnType<Router['replace']>
+
+  /**
+   * method to push a new route to the modal
+   */
+  push: (to: Parameters<Router['push']>[0], open?: boolean) => ReturnType<Router['push']>
+
+  /**
+   * method to replace the current route of the modal
+   */
+  replace: (to: Parameters<Router['replace']>[0]) => ReturnType<Router['replace']>
+
+  /**
+   * @deprecated use `route` instead
+   */
+  backgroundRoute: ComputedRef<ReturnType<Router['resolve']> | undefined>
 }
 
 const DEBUG = false
@@ -47,7 +78,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     })
   })
 
-  const backgroundRoute = computed(() => {
+  const route = computed(() => {
     if (historyState.value?.backgroundView) {
       return router.resolve(historyState.value?.backgroundView)
     } else {
@@ -55,9 +86,15 @@ export default defineNuxtPlugin(async (nuxt) => {
     }
   })
 
-  const route = computed(() => backgroundRoute.value || useRoute())
+  const layout = computed<PageMeta['layout']>(() => {
+    return (route.value ? route.value.meta.layout : router.currentRoute.value.meta.layout) || false
+  })
 
-  async function backgroundNavigate(action: 'push' | 'push_open' | 'replace', to: RouteLocationRaw, backgroundView: string) {
+  async function backgroundNavigate(
+    action: 'push' | 'push_open' | 'replace',
+    to: Parameters<Router['push']>[0] | Parameters<Router['replace']>[0],
+    backgroundView: string,
+  ) {
     const state = { id: `plus-${Date.now()}`, backgroundView } satisfies ModalPushRecord
 
     const _to = {
@@ -79,7 +116,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     }
   }
 
-  function push(to: RouteLocationRaw, open = false) {
+  const push: ModalRouter['push'] = function (to, open = false) {
     if (!historyState.value?.backgroundView) {
       routesStackSizeMap = {}
       return backgroundNavigate(open ? 'push_open' : 'push', to, router.currentRoute.value.fullPath)
@@ -87,7 +124,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     return backgroundNavigate(open ? 'push_open' : 'push', to, historyState.value.backgroundView)
   }
 
-  function replace(to: RouteLocationRaw) {
+  const replace: ModalRouter['replace'] = function (to) {
     if (!historyState.value?.backgroundView)
       return router.replace(to)
 
@@ -118,7 +155,8 @@ export default defineNuxtPlugin(async (nuxt) => {
     provide: {
       modalRouter: {
         route,
-        backgroundRoute,
+        layout,
+        backgroundRoute: route,
         stacks,
         close,
         push,
