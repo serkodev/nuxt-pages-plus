@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import type { PageMeta } from '#app'
 import type { ComputedRef } from '#imports'
 import type { Router } from 'vue-router'
 import { defineNuxtPlugin } from '#app'
@@ -15,6 +16,12 @@ export interface ModalRouter {
    * the route of the background view of the modal
    */
   route: ComputedRef<ReturnType<Router['resolve']> | undefined>
+
+  /**
+   * returns the layout of the modal route view when the modal is opened
+   * must pass to NuxtLayout to prevent using wrong layout from parallel routes
+   */
+  layout: ComputedRef<PageMeta['layout']>
 
   /**
    * the opened stacks count of the modal view
@@ -77,6 +84,10 @@ export default defineNuxtPlugin(async (nuxt) => {
     } else {
       return undefined
     }
+  })
+
+  const layout = computed<PageMeta['layout']>(() => {
+    return (route.value ? route.value.meta.layout : router.currentRoute.value.meta.layout) || false
   })
 
   async function backgroundNavigate(
@@ -144,6 +155,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     provide: {
       modalRouter: {
         route,
+        layout,
         backgroundRoute: route,
         stacks,
         close,
