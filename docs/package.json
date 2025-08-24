@@ -5,16 +5,11 @@
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi generate",
-    "preview": "nuxi preview",
-    "lint": "eslint ."
+    "preview": "nuxi preview"
   },
   "devDependencies": {
     "@nuxt-themes/docus": "^1.15.1",
-    "@nuxt/eslint-config": "catalog:dev",
-    "@nuxt/ui-templates": "^1.3.4",
     "@nuxtjs/tailwindcss": "^6.14.0",
-    "@types/node": "^20.19.11",
-    "eslint": "catalog:dev",
     "nuxt": "catalog:nuxt"
   }
 }
