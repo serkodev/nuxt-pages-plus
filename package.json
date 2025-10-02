@@ -50,7 +50,7 @@
     "@nuxt/module-builder": "catalog:nuxt",
     "@nuxt/schema": "catalog:nuxt",
     "@nuxt/test-utils": "catalog:nuxt",
-    "@types/node": "^20.19.17",
+    "@types/node": "^22.9.0",
     "bumpp": "^10.2.3",
     "eslint": "catalog:dev",
     "nuxt": "catalog:nuxt",
