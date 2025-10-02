@@ -6,15 +6,20 @@ packages:
 patchedDependencies:
   pinceau: patches/pinceau.patch
 
+catalog:
+  vue-router: ^4.5.1
+
 catalogs:
   dev:
-    '@antfu/eslint-config': ^5.2.1
+    '@antfu/eslint-config': ^5.4.1
     '@nuxt/eslint-config': ^1.9.0
-    eslint: ^9.34.0
+    eslint: ^9.36.0
     typescript: ~5.9.2
   docs:
     pinceau: =0.18.10
   nuxt:
-    '@nuxt/kit': ^3.18.1
-    '@nuxt/schema': ^3.18.1
-    nuxt: ^3.18.1
+    '@nuxt/kit': ^4.1.2
+    '@nuxt/module-builder': ^1.0.2
+    '@nuxt/schema': ^4.1.2
+    '@nuxt/test-utils': ^3.19.2
+    nuxt: ^4.1.2
