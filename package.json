@@ -20,7 +20,7 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build",
+    "build": "nuxt-module-build build",
     "dev": "nuxi dev",
     "dev:build": "nuxi build",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base-utils && nuxi prepare examples/base",
@@ -29,13 +29,14 @@
     "docs:dev": "pnpm --dir docs dev",
     "docs:build": "pnpm --dir docs build",
     "docs:deploy": "pnpm dev:prepare && pnpm docs:build",
-    "prepublishOnly": "pnpm lint && pnpm test && pnpm prepack && bumpp",
+    "prepublishOnly": "pnpm lint && pnpm test && pnpm build && bumpp",
     "release": "pnpm publish",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "prepare:types": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare:types"
+    "prepare:types": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare:types",
+    "prepare": "nuxt-module-build prepare"
   },
   "dependencies": {
     "@nuxt/kit": "catalog:nuxt",
