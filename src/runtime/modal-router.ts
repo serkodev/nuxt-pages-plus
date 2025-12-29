@@ -98,7 +98,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     const state = { id: `plus-${Date.now()}`, backgroundView } satisfies ModalPushRecord
 
     const _to = {
-      ...(typeof to === "string" ? router.resolve(to) : to),
+      ...(typeof to === 'string' ? router.resolve(to) : to),
       state,
     }
 
