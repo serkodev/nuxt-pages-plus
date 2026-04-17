@@ -69,7 +69,7 @@ export default defineNuxtPlugin(async (nuxt) => {
   nuxt.hook('app:mounted', () => {
     // load background view if background view not loaded (when navigate from browser)
     router.beforeResolve(async () => {
-      if (history.state.backgroundView)
+      if (history.state?.backgroundView)
         await loadRouteLocation(router.resolve(history.state.backgroundView))
     })
 
