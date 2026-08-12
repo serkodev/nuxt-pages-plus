@@ -1,0 +1,13 @@
+{
+  // scoped typecheck for the module itself (examples/playground/docs have their own Nuxt contexts)
+  "extends": "./.nuxt/tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".data",
+    "docs",
+    "examples",
+    "playground",
+    "test/e2e/fixtures"
+  ]
+}

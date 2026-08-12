@@ -35,6 +35,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.typecheck.json",
     "prepare:types": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare:types",
     "prepare": "nuxt-module-build prepare"
   },
@@ -57,7 +58,8 @@
     "playwright-core": "^1.62.1",
     "typescript": "catalog:dev",
     "vitest": "^4.1.10",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "vue-tsc": "^3.3.9"
   },
   "peerDependencies": {
     "nuxt": ">=3.16.0"
