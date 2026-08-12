@@ -10,9 +10,9 @@
     </div>
 
     <PlusModalLink to="/examples/modal-routes/info/1">
-      <button class="daisy-btn daisy-btn-primary">
+      <UButton>
         Open Info
-      </button>
+      </UButton>
     </PlusModalLink>
   </TheBoundary>
   <PlusModalPage name="modal" />

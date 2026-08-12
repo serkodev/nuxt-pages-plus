@@ -11,11 +11,16 @@ const relativePath = computed(() => {
       <slot />
 
       <template #toolbar-items>
-        <a href="https://github.com/serkodev/nuxt-pages-plus/tree/main/docs/pages/examples/modal-routes" target="_blank">
-          <button class="daisy-btn daisy-btn-xs text-nuxt">
-            Source
-          </button>
-        </a>
+        <UButton
+          to="https://github.com/serkodev/nuxt-pages-plus/tree/main/docs/pages/examples/modal-routes"
+          target="_blank"
+          size="xs"
+          color="neutral"
+          variant="soft"
+          class="text-nuxt"
+        >
+          Source
+        </UButton>
       </template>
     </ExampleBrowser>
   </DocsPageLayout>

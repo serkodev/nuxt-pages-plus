@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const links = [6, 7, 8].map((i) => {
+const items = [6, 7, 8].map((i) => {
   return {
     label: `Topic ${i}`,
-    icon: 'i-heroicons-star',
+    icon: 'i-lucide-star',
     to: `/topic/${i}`,
   }
 })
@@ -10,6 +10,6 @@ const links = [6, 7, 8].map((i) => {
 
 <template>
   <ExampleView label="$__PAGES_PATH__">
-    <UVerticalNavigation :links="links" :ui="{ padding: 'px-3 py-3' }" />
+    <UNavigationMenu orientation="vertical" :items="items" :ui="{ link: 'px-3 py-3' }" />
   </ExampleView>
 </template>

@@ -9,27 +9,27 @@ const id = computed(() => Number.parseInt(parentRoute.params.id as string) || 1)
     <TheBoundary label="$__PAGES_PATH__" class="w-full h-full flex flex-col gap-4 items-center justify-center">
       <div class="flex items-center gap-4">
         <PlusModalLink :to="id > 1 ? `/examples/modal-routes/info/${id - 1}` : undefined">
-          <button class="daisy-btn daisy-btn-sm daisy-btn-primary">
+          <UButton size="sm">
             -
-          </button>
+          </UButton>
         </PlusModalLink>
 
         <code>info/{{ id }}</code>
 
         <PlusModalLink :to="`/examples/modal-routes/info/${id + 1}`">
-          <button class="daisy-btn daisy-btn-sm daisy-btn-primary">
+          <UButton size="sm">
             +
-          </button>
+          </UButton>
         </PlusModalLink>
       </div>
 
-      <button class="daisy-btn daisy-btn-sm daisy-btn-primary" @click="$modalRouter.close()">
+      <UButton size="sm" @click="$modalRouter.close()">
         Close
-      </button>
+      </UButton>
 
-      <button v-if="(($modalRouter.stacks.value ?? []).length ?? 0) > 1" class="daisy-btn daisy-btn-sm daisy-btn-primary" @click="$modalRouter.close(true)">
+      <UButton v-if="(($modalRouter.stacks.value ?? []).length ?? 0) > 1" size="sm" @click="$modalRouter.close(true)">
         Close All
-      </button>
+      </UButton>
     </TheBoundary>
   </div>
 </template>

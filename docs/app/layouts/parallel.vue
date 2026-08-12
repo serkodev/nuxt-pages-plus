@@ -16,17 +16,17 @@ const relativePath = computed(() => {
     <ExampleBrowser :path="relativePath">
       <div class="flex-1 grid grid-cols-[320px_1fr] gap-6">
         <div class="flex flex-col">
-          <div role="tablist" class="daisy-tabs daisy-tabs-box font-semibold">
-            <NuxtLink
+          <div class="flex gap-1 rounded-lg bg-elevated p-1 font-semibold self-start">
+            <UButton
               v-for="link in links"
               :key="link.name"
               :to="link.path"
-              role="tab"
-              class="daisy-tab"
-              :class="{ 'daisy-tab-active': link.path === router?.currentRoute.value.path }"
+              size="sm"
+              :color="link.path === router?.currentRoute.value.path ? 'primary' : 'neutral'"
+              :variant="link.path === router?.currentRoute.value.path ? 'solid' : 'ghost'"
             >
               {{ link.name }}
-            </NuxtLink>
+            </UButton>
           </div>
 
           <PlusParallelPage name="left" />
@@ -35,11 +35,16 @@ const relativePath = computed(() => {
       </div>
 
       <template #toolbar-items>
-        <a href="https://github.com/serkodev/nuxt-pages-plus/tree/main/docs/pages/examples/parallel-routes" target="_blank">
-          <button class="daisy-btn daisy-btn-xs text-nuxt">
-            Source
-          </button>
-        </a>
+        <UButton
+          to="https://github.com/serkodev/nuxt-pages-plus/tree/main/docs/pages/examples/parallel-routes"
+          target="_blank"
+          size="xs"
+          color="neutral"
+          variant="soft"
+          class="text-nuxt"
+        >
+          Source
+        </UButton>
       </template>
     </ExampleBrowser>
   </DocsPageLayout>

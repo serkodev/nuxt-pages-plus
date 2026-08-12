@@ -1,31 +1,7 @@
 /*
  * Imported into the docus tailwind pipeline (see docus css module), so
- * tailwind directives like @plugin / @theme / @apply are processed here.
- *
- * daisyui powers the interactive example demos (mockup browser, tabs,
- * buttons) with a `daisy-` prefix to avoid clashing with Nuxt UI.
- * The theme is applied per demo container via the `data-theme` attribute
- * (bound to the site color mode in the example layouts).
+ * tailwind directives like @theme / @apply are processed here.
  */
-@plugin "daisyui" {
-  themes: light, dark;
-  prefix: "daisy-";
-}
-
-@plugin "daisyui/theme" {
-  name: "light";
-  --color-primary: #00dc82;
-  --color-primary-content: #003c20;
-  --color-secondary: #fbbf24;
-}
-
-@plugin "daisyui/theme" {
-  name: "dark";
-  --color-primary: #00dc82;
-  --color-primary-content: #003c20;
-  --color-secondary: #fbbf24;
-}
-
 @theme {
   --color-nuxt: #00dc82;
 }

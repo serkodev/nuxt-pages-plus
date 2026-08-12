@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const replaceNavigation = ref(false)
 
+const navigationTabs = [
+  { label: 'Push', value: 'push' },
+  { label: 'Replace', value: 'replace' },
+]
+
 const router = useRouter()
 const page = computed({
   get: () => Number.parseInt(router.currentRoute.value.params.id as string) || 1,
@@ -28,33 +33,36 @@ const page = computed({
         <div class="flex items-center gap-3 text-sm">
           Navigation
 
-          <div role="tablist" class="daisy-tabs daisy-tabs-box">
-            <a role="tab" class="daisy-tab" :class="!replaceNavigation && 'daisy-tab-active'" @click.prevent="replaceNavigation = false">Push</a>
-            <a role="tab" class="daisy-tab" :class="replaceNavigation && 'daisy-tab-active'" @click.prevent="replaceNavigation = true">Replace</a>
-          </div>
+          <UTabs
+            :items="navigationTabs"
+            :content="false"
+            size="xs"
+            :model-value="replaceNavigation ? 'replace' : 'push'"
+            @update:model-value="value => replaceNavigation = value === 'replace'"
+          />
         </div>
         <div class="flex items-center gap-3 text-sm">
           PlusModalLink
           <PlusModalLink to="/examples/modal-routes/gallery/9" class="text-red-500" :replace="replaceNavigation">
-            <button class="daisy-btn daisy-btn-sm daisy-btn-primary">
+            <UButton size="sm">
               Go Last
-            </button>
+            </UButton>
           </PlusModalLink>
           <PlusModalLink to="/examples/modal-routes/info/1" class="text-red-500">
-            <button class="daisy-btn daisy-btn-sm daisy-btn-primary">
+            <UButton size="sm">
               Go Info
-            </button>
+            </UButton>
           </PlusModalLink>
           <PlusModalLink open to="/examples/modal-routes/info/1" class="text-red-500">
-            <button class="daisy-btn daisy-btn-sm daisy-btn-primary">
+            <UButton size="sm">
               Open Info
-            </button>
+            </UButton>
           </PlusModalLink>
         </div>
 
-        <button class="daisy-btn daisy-btn-sm daisy-btn-primary" @click="$modalRouter.close()">
+        <UButton size="sm" @click="$modalRouter.close()">
           Close
-        </button>
+        </UButton>
       </div>
     </TheBoundary>
   </div>

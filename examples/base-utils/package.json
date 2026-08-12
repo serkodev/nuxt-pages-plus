@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
-    "daisyui": "^4.12.24",
     "nuxt": "catalog:nuxt"
   }
 }

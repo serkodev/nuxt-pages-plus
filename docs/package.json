@@ -8,9 +8,8 @@
     "preview": "nuxi preview"
   },
   "devDependencies": {
-    "@nuxt/ui": "^4.9.0",
+    "@nuxt/ui": "^4.10.0",
     "better-sqlite3": "^12.11.1",
-    "daisyui": "^5.0.0",
     "docus": "catalog:docs",
     "nuxt": "catalog:nuxt"
   }

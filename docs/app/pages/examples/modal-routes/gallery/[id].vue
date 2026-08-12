@@ -19,9 +19,9 @@ const page = computed({
       </div>
       <ThePagination v-model="page" :total="9" />
       <NuxtLink to="/examples/modal-routes/">
-        <button class="daisy-btn daisy-btn-primary">
+        <UButton>
           Go Index
-        </button>
+        </UButton>
       </NuxtLink>
     </TheBoundary>
   </div>

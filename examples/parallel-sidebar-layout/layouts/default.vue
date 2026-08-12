@@ -1,18 +1,18 @@
 <script setup lang="ts">
-const links = [
+const items = [
   {
     label: 'Home',
-    icon: 'i-heroicons-home',
+    icon: 'i-lucide-house',
     to: '/',
   },
   {
     label: 'Bookmark',
-    icon: 'i-heroicons-bookmark',
+    icon: 'i-lucide-bookmark',
     to: '/bookmark',
   },
   {
     label: 'About',
-    icon: 'i-heroicons-information-circle',
+    icon: 'i-lucide-info',
     to: '/about',
   },
 ]
@@ -22,7 +22,7 @@ const links = [
   <TheBoundary label="Layout: default" color="gray" class="h-screen flex p-6">
     <div class="flex-1 grid grid-cols-[400px_1fr_400px] gap-6">
       <div>
-        <UHorizontalNavigation :links class="px-2" />
+        <UNavigationMenu :items class="px-2" />
         <PlusParallelPage name="left">
           <template #index>
             <TheBoundary class="p-4" label="layouts/default.vue > PlusParallelPage">

@@ -6,10 +6,11 @@
     "prepare:types": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/ui": "^2.22.3",
+    "@nuxt/ui": "^4.10.0",
     "nuxt": "catalog:nuxt"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.123",
     "vue-tsc": "^3.3.9"
   }
 }
