@@ -67,6 +67,16 @@ export default defineNuxtPlugin(async (nuxt) => {
 
   // history is client side only, only hook after app mounted to prevent SSR hydration mismatch
   nuxt.hook('app:mounted', () => {
+    // a refreshed page renders as a plain full page, but the modal state persisted
+    // in its history entry would resurrect the modal when the entry is revisited
+    // with browser back / forward, so strip it from the current entry only.
+    // the keys must be kept as explicit undefined: vue-router re-merges its own
+    // (stale) cached state with history.state on the next push, and only keys
+    // present in history.state override the cached values
+    if (history.state?.backgroundView) {
+      history.replaceState({ ...history.state, id: undefined, backgroundView: undefined }, '')
+    }
+
     // load background view if background view not loaded (when navigate from browser)
     router.beforeResolve(async () => {
       if (history.state?.backgroundView)
