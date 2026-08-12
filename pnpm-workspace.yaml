@@ -23,4 +23,10 @@ catalogs:
     '@nuxt/module-builder': ^1.0.2
     '@nuxt/schema': ^4.1.2
     '@nuxt/test-utils': ^3.19.2
+    '@nuxt/vite-builder': ^4.1.2
     nuxt: ^4.1.2
+
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver
+  - vue-demi

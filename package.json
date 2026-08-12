@@ -50,10 +50,12 @@
     "@nuxt/module-builder": "catalog:nuxt",
     "@nuxt/schema": "catalog:nuxt",
     "@nuxt/test-utils": "catalog:nuxt",
+    "@nuxt/vite-builder": "catalog:nuxt",
     "@types/node": "^22.9.0",
     "bumpp": "^10.2.3",
     "eslint": "catalog:dev",
     "nuxt": "catalog:nuxt",
+    "playwright-core": "^1.62.1",
     "typescript": "catalog:dev",
     "vitest": "^3.2.4",
     "vue-router": "catalog:"
