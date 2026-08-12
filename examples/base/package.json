@@ -6,7 +6,6 @@
     "prepare:types": "nuxt prepare"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.9.0",
     "@nuxt/ui": "^4.10.0",
     "nuxt": "catalog:nuxt"
   },
