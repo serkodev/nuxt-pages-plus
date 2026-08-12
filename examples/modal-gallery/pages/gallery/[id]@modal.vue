@@ -10,13 +10,13 @@ const router = useRouter()
 const page = computed({
   get: () => Number.parseInt(router.currentRoute.value.params.id as string) || 1,
   set: (val) => {
-    useModalRouter().push(`/examples/modal-routes/gallery/${val}`)
+    useModalRouter().push(`/gallery/${val}`)
   },
 })
 </script>
 
 <template>
-  <div class="modal-wrapper !absolute">
+  <div class="modal-wrapper">
     <TheBoundary label="$__PAGES_PATH__" class="w-full h-full flex items-center justify-center">
       <div class="border border-gray-800 p-6 rounded-lg space-y-3">
         <div>
@@ -43,17 +43,17 @@ const page = computed({
         </div>
         <div class="flex items-center gap-3 text-sm">
           PlusModalLink
-          <PlusModalLink to="/examples/modal-routes/gallery/9" class="text-red-500" :replace="replaceNavigation">
+          <PlusModalLink to="/gallery/9" class="text-red-500" :replace="replaceNavigation">
             <UButton size="sm">
               Go Last
             </UButton>
           </PlusModalLink>
-          <PlusModalLink to="/examples/modal-routes/info/1" class="text-red-500">
+          <PlusModalLink to="/info/1" class="text-red-500">
             <UButton size="sm">
               Go Info
             </UButton>
           </PlusModalLink>
-          <PlusModalLink open to="/examples/modal-routes/info/1" class="text-red-500">
+          <PlusModalLink open to="/info/1" class="text-red-500">
             <UButton size="sm">
               Open Info
             </UButton>

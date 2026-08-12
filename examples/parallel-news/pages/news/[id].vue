@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const id = computed(() => Number.parseInt(useRoute().params.id as string))
-const news = computed(() => exampleNews[id.value])
+const news = computed(() => exampleNews[id.value] ?? exampleNews[0]!)
 </script>
 
 <template>
