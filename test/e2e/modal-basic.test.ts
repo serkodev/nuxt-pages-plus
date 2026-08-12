@@ -55,6 +55,20 @@ describe('modal-basic fixture', async () => {
     await page.close()
   }, 120_000)
 
+  it('exposes the modal parallel route reactively via useParallelRoute', async () => {
+    const page = await createPage('/')
+
+    // the modal parallel router has no match for / and stays on its initial route
+    expect((await page.locator('#modal-route-path').textContent())?.trim()).toBe('/')
+
+    // opening the modal navigates the parallel router, and the route object
+    // returned by useParallelRoute must reflect it reactively
+    await openInfoModal(page)
+    expect((await page.locator('#modal-route-path').textContent())?.trim()).toBe('/info')
+
+    await page.close()
+  }, 120_000)
+
   it('closes the modal like a browser back navigation', async () => {
     const page = await createPage('/')
     await openInfoModal(page)

@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "@nuxt/kit": "catalog:nuxt",
-    "@vueuse/core": "^14.4.0",
     "defu": "^6.1.7",
     "ufo": "^1.6.4"
   },

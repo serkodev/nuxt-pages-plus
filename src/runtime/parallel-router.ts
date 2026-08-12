@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router, RouteRecord } from 'vue-router'
+import type { Ref } from '#imports'
 import type { PagesPlusOptions, ParallelPageOptions } from './types'
-import { reactiveComputed } from '@vueuse/core'
 import { defu } from 'defu'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { defineNuxtPlugin, useRouter } from '#app'
@@ -23,6 +23,21 @@ export interface ParallelRouter extends Router {
 }
 
 const DEBUG = false
+
+// reactive object that always reflects the ref's current value,
+// so a parallel route can be consumed like `useRoute()` without unwrapping `.value`
+// (equivalent to `toReactive` from `@vueuse/core`, inlined to avoid the dependency)
+function toReactive<T extends object>(objectRef: Ref<T>): T {
+  const proxy = new Proxy({} as T, {
+    get: (_, p, receiver) => Reflect.get(objectRef.value, p, receiver),
+    set: (_, p, value) => Reflect.set(objectRef.value, p, value),
+    deleteProperty: (_, p) => Reflect.deleteProperty(objectRef.value, p),
+    has: (_, p) => Reflect.has(objectRef.value, p),
+    ownKeys: () => Object.keys(objectRef.value),
+    getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }),
+  })
+  return reactive(proxy) as T
+}
 
 export default defineNuxtPlugin(async () => {
   const router = useRouter()
@@ -57,7 +72,7 @@ export default defineNuxtPlugin(async () => {
   for (const [group, routes] of Object.entries(parallelRoutes)) {
     const parallelRouter = await createParallelRouter(group, routes, router, pagesOptions[group] ?? {})
     parallelRouters[group] = parallelRouter
-    _parallelRoutes[group] = reactiveComputed(() => parallelRouter.currentRoute.value)
+    _parallelRoutes[group] = toReactive(parallelRouter.currentRoute)
 
     if (DEBUG)
       console.log(`parallelRouter[${group}]`, parallelRouter.getRoutes())
