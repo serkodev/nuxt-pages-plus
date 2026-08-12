@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   extends: '../base',
   pagesPlus: {
+    namedViewsAsParallelRoutes: true,
     parallelPages: {
       left: {
         index: '/foo',
