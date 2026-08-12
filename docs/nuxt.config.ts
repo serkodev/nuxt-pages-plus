@@ -20,6 +20,14 @@ export default defineNuxtConfig({
 
   // XXX: temp fix for SSR crash for content including table & code block when development
   ssr: process.env.NODE_ENV === 'production',
+  content: {
+    experimental: {
+      // with ssr disabled in development, document-driven pages have no server
+      // payload on a full page load, so content must be queryable from the
+      // client or every hard refresh on a docs page renders the 404 page
+      clientDB: process.env.NODE_ENV !== 'production',
+    },
+  },
   nitro: {
     prerender: {
       ignore: [

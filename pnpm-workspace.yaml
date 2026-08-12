@@ -43,6 +43,18 @@ onlyBuiltDependencies:
   - unrs-resolver
   - vue-demi
 
+# `@nuxt/content` v2 imports `nuxt/app` at runtime but does not declare `nuxt`
+# as a peer, so with shamefully-hoist its import falls through to the hoisted
+# root nuxt (v4) instead of the docs nuxt (v3), breaking `pnpm docs:dev`
+# (missing `asyncCallHook` export). Injecting the peer links the correct nuxt.
+packageExtensions:
+  '@nuxt/content@2':
+    peerDependencies:
+      nuxt: '*'
+    peerDependenciesMeta:
+      nuxt:
+        optional: true
+
 allowBuilds:
   esbuild: true
   unrs-resolver: true

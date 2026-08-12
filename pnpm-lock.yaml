@@ -49,6 +49,8 @@ catalogs:
       specifier: ^4.5.2
       version: 4.5.2
 
+packageExtensionsChecksum: sha256-pFb0/l7Eg8hBb6R/8vDxrgAF08pV4ywxR0ZAVb2tJdQ=
+
 patchedDependencies:
   pinceau: cae050cad5c9416b0f2b2e07c2afe1b0712eab59d0015d44472622cea9a03c7d
 
@@ -1342,6 +1344,11 @@ packages:
 
   '@nuxt/content@2.13.4':
     resolution: {integrity: sha512-NBaHL/SNYUK7+RLgOngSFmKqEPYc0dYdnwVFsxIdrOZUoUbD8ERJJDaoRwwtyYCMOgUeFA/zxAkuADytp+DKiQ==}
+    peerDependencies:
+      nuxt: '*'
+    peerDependenciesMeta:
+      nuxt:
+        optional: true
 
   '@nuxt/devalue@2.0.2':
     resolution: {integrity: sha512-GBzP8zOc7CGWyFQS6dv1lQz8VVpz5C2yRszbXufwG/9zhStTIH50EtD87NmWbTMwXDvZLNg8GIpb1UFdH93JCA==}
@@ -8633,6 +8640,8 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       unstorage: 1.17.5(db0@0.3.4)(ioredis@5.11.1(supports-color@10.2.2))
       ws: 8.21.3
+    optionalDependencies:
+      nuxt: 3.21.11(@oxc-project/types@0.143.0)(@types/node@24.13.3)(@vue/compiler-sfc@3.5.41)(cac@6.7.14)(db0@0.3.4)(esbuild@0.28.2)(eslint@10.8.1(jiti@2.7.0)(supports-color@10.2.2))(ioredis@5.11.1(supports-color@10.2.2))(lightningcss@1.33.0)(magicast@0.5.4)(optionator@0.9.4)(rolldown@1.2.3)(rollup-plugin-visualizer@7.0.1(rolldown@1.2.3)(rollup@3.30.0))(rollup@3.30.0)(srvx@0.11.22)(supports-color@10.2.2)(terser@5.49.2)(typescript@5.9.3)(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.2)(yaml@2.9.0))(vue-tsc@3.3.9(typescript@5.9.3))(yaml@2.9.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -8656,7 +8665,6 @@ snapshots:
       - idb-keyval
       - ioredis
       - magicast
-      - nuxt
       - srvx
       - supports-color
       - uploadthing
