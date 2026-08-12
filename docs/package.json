@@ -8,9 +8,10 @@
     "preview": "nuxi preview"
   },
   "devDependencies": {
-    "@nuxt-themes/docus": "^1.15.1",
-    "@nuxtjs/tailwindcss": "^6.14.0",
-    "nuxt": "catalog:docs",
-    "pinceau": "catalog:docs"
+    "@nuxt/ui": "^4.9.0",
+    "better-sqlite3": "^12.11.1",
+    "daisyui": "^5.0.0",
+    "docus": "catalog:docs",
+    "nuxt": "catalog:nuxt"
   }
 }

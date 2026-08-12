@@ -28,7 +28,7 @@ const page = computed({
         <div class="flex items-center gap-3 text-sm">
           Navigation
 
-          <div role="tablist" class="daisy-tabs daisy-tabs-boxed">
+          <div role="tablist" class="daisy-tabs daisy-tabs-box">
             <a role="tab" class="daisy-tab" :class="!replaceNavigation && 'daisy-tab-active'" @click.prevent="replaceNavigation = false">Push</a>
             <a role="tab" class="daisy-tab" :class="replaceNavigation && 'daisy-tab-active'" @click.prevent="replaceNavigation = true">Replace</a>
           </div>

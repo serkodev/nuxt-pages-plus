@@ -1,35 +1,26 @@
-import process from 'node:process'
 import { createResolver } from '@nuxt/kit'
 
 const { resolve } = createResolver(import.meta.url)
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
   extends: [
-    '@nuxt-themes/docus',
+    'docus',
     resolve('../examples/base-utils'),
   ],
-  devtools: { enabled: false },
-  css: [
-    resolve('./assets/main.css'),
-  ],
   modules: [
-    '@nuxtjs/tailwindcss',
     resolve('../src/module'),
   ],
+  devtools: { enabled: false },
 
-  // XXX: temp fix for SSR crash for content including table & code block when development
-  ssr: process.env.NODE_ENV === 'production',
-  content: {
-    experimental: {
-      // with ssr disabled in development, document-driven pages have no server
-      // payload on a full page load, so content must be queryable from the
-      // client or every hard refresh on a docs page renders the 404 page
-      clientDB: process.env.NODE_ENV !== 'production',
-    },
+  site: {
+    url: 'https://nuxt-pages-plus.pages.dev',
+    name: 'Nuxt Pages Plus',
   },
+
   nitro: {
     prerender: {
+      // the interactive example pages are client-driven demos;
+      // they are served by the SPA fallback instead of being prerendered
       ignore: [
         '/examples/',
       ],
@@ -41,6 +32,9 @@ export default defineNuxtConfig({
   },
 
   pagesPlus: {
+    // the modal routes demo uses `[id]@modal.vue` files, which Nuxt >= 4.5
+    // would otherwise merge into the base route as vue-router named views
+    namedViewsAsParallelRoutes: true,
     parallelPages: {
       left: {
         // this config is for demo in docs only

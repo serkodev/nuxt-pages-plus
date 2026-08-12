@@ -16,7 +16,7 @@ const relativePath = computed(() => {
     <ExampleBrowser :path="relativePath">
       <div class="flex-1 grid grid-cols-[320px_1fr] gap-6">
         <div class="flex flex-col">
-          <div role="tablist" class="daisy-tabs daisy-tabs-boxed font-semibold">
+          <div role="tablist" class="daisy-tabs daisy-tabs-box font-semibold">
             <NuxtLink
               v-for="link in links"
               :key="link.name"

@@ -8,14 +8,12 @@ trustPolicyExclude:
   - tailwind-merge@2.6.1
   - rollup@3.30.0
   - semver@6.3.1
+  - undici@5.29.0
 
 packages:
   - docs
   - playground
   - examples/*
-
-patchedDependencies:
-  pinceau: patches/pinceau.patch
 
 catalog:
   vue-router: ^4.6.4
@@ -27,35 +25,24 @@ catalogs:
     eslint: ^10.8.1
     typescript: ~5.9.3
   docs:
-    nuxt: ^3.21.11
-    pinceau: =0.18.10
+    # lock version for clone app.vue
+    docus: =5.12.3
   nuxt:
     '@nuxt/kit': ^4.5.2
     '@nuxt/module-builder': ^1.0.3
     '@nuxt/schema': ^4.5.2
     '@nuxt/test-utils': ^4.1.0
     '@nuxt/vite-builder': ^4.5.2
-    # eslint-disable-next-line pnpm/yaml-no-duplicate-catalog-item
     nuxt: ^4.5.2
 
 onlyBuiltDependencies:
+  - better-sqlite3
   - esbuild
   - unrs-resolver
   - vue-demi
 
-# `@nuxt/content` v2 imports `nuxt/app` at runtime but does not declare `nuxt`
-# as a peer, so with shamefully-hoist its import falls through to the hoisted
-# root nuxt (v4) instead of the docs nuxt (v3), breaking `pnpm docs:dev`
-# (missing `asyncCallHook` export). Injecting the peer links the correct nuxt.
-packageExtensions:
-  '@nuxt/content@2':
-    peerDependencies:
-      nuxt: '*'
-    peerDependenciesMeta:
-      nuxt:
-        optional: true
-
 allowBuilds:
+  better-sqlite3: true
   esbuild: true
   unrs-resolver: true
   vue-demi: true
