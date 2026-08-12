@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { PagesPlusOptions } from '../types'
+import { viewDepthKey } from 'vue-router'
 import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
 import { computed, inject, provide, unref, useParallelRouter } from '#imports'
-import { viewDepthKey } from 'vue-router'
 import { ParallelRouterSymbol } from '../symbols'
 
 const props = defineProps<{
