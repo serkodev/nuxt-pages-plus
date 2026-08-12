@@ -40,9 +40,9 @@
   },
   "dependencies": {
     "@nuxt/kit": "catalog:nuxt",
-    "@vueuse/core": "^13.9.0",
-    "defu": "^6.1.4",
-    "ufo": "^1.6.1"
+    "@vueuse/core": "^14.4.0",
+    "defu": "^6.1.7",
+    "ufo": "^1.6.4"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
@@ -51,17 +51,17 @@
     "@nuxt/schema": "catalog:nuxt",
     "@nuxt/test-utils": "catalog:nuxt",
     "@nuxt/vite-builder": "catalog:nuxt",
-    "@types/node": "^22.9.0",
-    "bumpp": "^10.2.3",
+    "@types/node": "^24.13.3",
+    "bumpp": "^12.2.0",
     "eslint": "catalog:dev",
     "nuxt": "catalog:nuxt",
     "playwright-core": "^1.62.1",
     "typescript": "catalog:dev",
-    "vitest": "^3.2.4",
+    "vitest": "^4.1.10",
     "vue-router": "catalog:"
   },
   "peerDependencies": {
     "nuxt": ">=3.16.0"
   },
-  "packageManager": "pnpm@10.17.1"
+  "packageManager": "pnpm@11.21.0"
 }
