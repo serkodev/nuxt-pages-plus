@@ -4,8 +4,8 @@ const { resolve } = createResolver(import.meta.url)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: ['../base-utils'],
   modules: [
+    resolve('../../src/module'),
     '@nuxt/ui',
   ],
   devtools: { enabled: true },
