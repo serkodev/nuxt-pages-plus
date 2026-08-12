@@ -1,3 +1,14 @@
+shamefullyHoist: true
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+trustPolicyExclude:
+  - tailwind-merge@2.6.1
+  - rollup@3.30.0
+  - semver@6.3.1
+
 packages:
   - docs
   - playground
@@ -7,26 +18,32 @@ patchedDependencies:
   pinceau: patches/pinceau.patch
 
 catalog:
-  vue-router: ^4.5.1
+  vue-router: ^4.6.4
 
 catalogs:
   dev:
-    '@antfu/eslint-config': ^5.4.1
-    '@nuxt/eslint-config': ^1.9.0
-    eslint: ^9.36.0
-    typescript: ~5.9.2
+    '@antfu/eslint-config': ^9.3.0
+    '@nuxt/eslint-config': ^1.17.0
+    eslint: ^10.8.1
+    typescript: ~5.9.3
   docs:
-    nuxt: ^3.0.0-rc.14
+    nuxt: ^3.21.11
     pinceau: =0.18.10
   nuxt:
-    '@nuxt/kit': ^4.1.2
-    '@nuxt/module-builder': ^1.0.2
-    '@nuxt/schema': ^4.1.2
-    '@nuxt/test-utils': ^3.19.2
-    '@nuxt/vite-builder': ^4.1.2
-    nuxt: ^4.1.2
+    '@nuxt/kit': ^4.5.2
+    '@nuxt/module-builder': ^1.0.3
+    '@nuxt/schema': ^4.5.2
+    '@nuxt/test-utils': ^4.1.0
+    '@nuxt/vite-builder': ^4.5.2
+    # eslint-disable-next-line pnpm/yaml-no-duplicate-catalog-item
+    nuxt: ^4.5.2
 
 onlyBuiltDependencies:
   - esbuild
   - unrs-resolver
   - vue-demi
+
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+  vue-demi: true

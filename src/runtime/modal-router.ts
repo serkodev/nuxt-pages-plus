@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
+import type { Router } from 'vue-router'
 import type { PageMeta } from '#app'
 import type { ComputedRef } from '#imports'
-import type { Router } from 'vue-router'
+import { loadRouteLocation, useRouter } from 'vue-router'
 import { defineNuxtPlugin } from '#app'
 import { computed, shallowRef } from '#imports'
-import { loadRouteLocation, useRouter } from 'vue-router'
 
 interface ModalPushRecord {
   id: string

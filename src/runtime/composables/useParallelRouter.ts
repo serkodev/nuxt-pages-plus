@@ -1,5 +1,5 @@
-import type { Ref } from '#imports'
 import type { RouteLocationNormalizedLoaded, RouteLocationNormalizedLoadedGeneric, Router } from 'vue-router'
+import type { Ref } from '#imports'
 import type { ParallelRouter } from '../parallel-router'
 import { useNuxtApp, useRoute, useRouter } from '#app'
 import { inject, toRef, unref } from '#imports'

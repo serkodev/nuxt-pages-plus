@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 import type { RouteLocationNormalizedLoaded, RouteLocationRaw, RouteLocationResolved, Router, RouteRecord } from 'vue-router'
 import type { PagesPlusOptions, ParallelPageOptions } from './types'
-import { defineNuxtPlugin, useRouter } from '#app'
-import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
-import { reactive } from '#imports'
 import { reactiveComputed } from '@vueuse/core'
 import { defu } from 'defu'
 import { createMemoryHistory, createRouter } from 'vue-router'
+import { defineNuxtPlugin, useRouter } from '#app'
+import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
+import { reactive } from '#imports'
 import { ParallelRouteNotFoundSymbol } from './symbols'
 import { extractParallelRoutePath } from './utils'
 
