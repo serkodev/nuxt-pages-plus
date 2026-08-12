@@ -16,7 +16,7 @@ packages:
   - examples/*
 
 catalog:
-  vue-router: ^4.6.4
+  vue-router: ^5.2.0
 
 catalogs:
   dev:
