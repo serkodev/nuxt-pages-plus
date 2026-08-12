@@ -9,7 +9,7 @@ function splitParallelPath(path: string, separator: string): [string[], string[]
       // split x@y to ['x', 'y'], @y to ['', 'y']
       const sPath = p.split(separator)
       if (sPath.length >= 2) {
-        const [spath, ...sname] = sPath
+        const [spath = '', ...sname] = sPath
 
         // when input x@y get x as path, if only @y, do nothing
         if (spath.length > 0 && spath !== 'index')

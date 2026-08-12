@@ -147,7 +147,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     }
 
     function getCurrentStackSize() {
-      return (stacks.value ?? [0]).slice(-1)[0]
+      return (stacks.value ?? [0]).slice(-1)[0] ?? 0
     }
 
     const size = allOpened ? getAllStackSize() : getCurrentStackSize()
