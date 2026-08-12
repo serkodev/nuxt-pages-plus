@@ -36,6 +36,7 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "typecheck": "vue-tsc --noEmit -p tsconfig.typecheck.json",
+    "test:matrix": "pnpm build && node test/matrix/run.mjs",
     "prepare:types": "pnpm --filter \"./examples/**\" --filter \"./playground\" prepare:types",
     "prepare": "nuxt-module-build prepare"
   },

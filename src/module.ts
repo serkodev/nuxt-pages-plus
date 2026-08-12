@@ -7,6 +7,10 @@ export default defineNuxtModule<PagesPlusOptions>({
   meta: {
     name: 'nuxt-pages-plus',
     configKey: 'pagesPlus',
+    compatibility: {
+      // oldest version the compatibility matrix (test/matrix) is verified against
+      nuxt: '>=3.16.0',
+    },
   },
   defaults: {
     separator: '@',

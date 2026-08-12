@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm lint
+      - run: pnpm dev:prepare
+      - run: npx playwright-core install chromium
+      - run: pnpm test
+
+  # verifies the packed module (what `pnpm publish` ships) against the
+  # boundary versions of every supported nuxt generation, see test/matrix
+  compat-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        nuxt:
+          - 3.16.0 # nuxt 3 floor (vue-router 4, kit 3)
+          - 3x # latest nuxt 3
+          - 4.0.3 # first nuxt 4 line (vue-router 4, kit 4; 4.0.0-4.0.2 nitro can't serve assets on modern node)
+          - 4.3.1 # last vue-router-4-based nuxt 4
+          - 4.4.2 # first vue-router-5-based nuxt 4
+          - latest # latest nuxt 4 (vue-router 5, native named views)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm build
+      - run: npx playwright-core install chromium
+      - run: node test/matrix/run.mjs ${{ matrix.nuxt }}
