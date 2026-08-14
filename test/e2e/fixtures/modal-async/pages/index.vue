@@ -10,10 +10,6 @@
       Go to gallery 5
     </NuxtLink>
 
-    <PlusModalLink to="/fetch-one/1">
-      Open fetch-one 1
-    </PlusModalLink>
-
     <PlusModalLink to="/fetch-two/1">
       Open fetch-two 1
     </PlusModalLink>
