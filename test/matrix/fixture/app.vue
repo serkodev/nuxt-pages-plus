@@ -35,7 +35,11 @@ const routerNames = Object.keys(useParallelRouters()).sort().join(',')
     </aside>
 
     <main>
-      <PlusModalNuxtPage />
+      <PlusModalNuxtPage v-slot="{ route, layout }">
+        <NuxtLayout :name="layout">
+          <NuxtPage :route="route" />
+        </NuxtLayout>
+      </PlusModalNuxtPage>
     </main>
 
     <div id="modal-route-path" hidden>

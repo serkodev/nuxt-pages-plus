@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import type { NuxtPageProps } from '#app'
+import type { NuxtPageProps, PageMeta } from '#app'
 import { NuxtPage } from '#components'
 import { computed, useModalRouter } from '#imports'
 
 const props = defineProps<NuxtPageProps>()
+
+defineSlots<{
+  default?: (props: {
+    route: NuxtPageProps['route']
+    layout: PageMeta['layout']
+  }) => any
+}>()
 
 const { route: modalRoute, layout } = useModalRouter()
 
