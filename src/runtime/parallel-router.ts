@@ -49,7 +49,8 @@ export default defineNuxtPlugin(async (nuxt) => {
     // below, so boot navigations can never be held
     nuxt.hooks.hookOnce('app:beforeMount', () => {
       // without server rendering there is nothing to hydrate
-      if (!nuxt.payload.serverRendered || !nuxt.isHydrating) { return }
+      if (!nuxt.payload.serverRendered || !nuxt.isHydrating)
+        return
 
       // the pending popstate destination — matched by target path so an aborted
       // popstate (or a concurrent programmatic push) cannot leak the hold
@@ -67,7 +68,10 @@ export default defineNuxtPlugin(async (nuxt) => {
       const hydrated = new Promise<void>((resolve) => {
         function done() {
           popstateTarget = undefined
-          for (const stop of stops) { stop() }
+          for (const stop of stops) {
+            stop()
+          }
+
           resolve()
         }
         stops.push(
@@ -101,7 +105,9 @@ export default defineNuxtPlugin(async (nuxt) => {
         // (`_processingMiddleware` stays set while held, so a concurrent `navigateTo()`
         // is a no-op — the held back/forward press is the user's latest intent and wins)
         router.beforeEach(async (to) => {
-          if (!matchesPopstate(to)) { return }
+          if (!matchesPopstate(to))
+            return
+
           popstateTarget = undefined
           await hydrated
         }),
