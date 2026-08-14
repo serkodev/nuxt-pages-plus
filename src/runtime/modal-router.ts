@@ -18,6 +18,12 @@ export interface ModalRouter {
   route: ComputedRef<ReturnType<Router['resolve']> | undefined>
 
   /**
+   * whether a modal route is currently open
+   * (the current history entry carries a modal background view)
+   */
+  isOpen: ComputedRef<boolean>
+
+  /**
    * returns the layout of the modal route view when the modal is opened
    * must pass to NuxtLayout to prevent using wrong layout from parallel routes
    */
@@ -83,8 +89,14 @@ export default defineNuxtPlugin(async (nuxt) => {
         await loadRouteLocation(router.resolve(history.state.backgroundView))
     })
 
-    router.afterEach(() => {
-      historyState.value = history.state
+    router.afterEach((_to, _from, failure) => {
+      // an aborted navigation commits nothing, but at this point history.state
+      // may still belong to the reverted target entry (a guard-aborted popstate
+      // is restored asynchronously with vue-router's listener paused, so no
+      // later navigation re-syncs it) — snapshotting it would desync the modal
+      // state from the entry the browser actually stays on
+      if (!failure)
+        historyState.value = history.state
     })
   })
 
@@ -95,6 +107,8 @@ export default defineNuxtPlugin(async (nuxt) => {
       return undefined
     }
   })
+
+  const isOpen = computed(() => !!historyState.value?.backgroundView)
 
   const layout = computed<PageMeta['layout']>(() => {
     return (route.value ? route.value.meta.layout : router.currentRoute.value.meta.layout) || false
@@ -165,6 +179,7 @@ export default defineNuxtPlugin(async (nuxt) => {
     provide: {
       modalRouter: {
         route,
+        isOpen,
         layout,
         backgroundRoute: route,
         stacks,
