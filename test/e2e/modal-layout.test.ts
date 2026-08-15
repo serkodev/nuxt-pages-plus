@@ -25,6 +25,24 @@ describe('modal-layout fixture', async () => {
     await page.locator('.modal-wrapper').getByRole('heading', { name: 'info modal' }).waitFor()
   }
 
+  async function armScrollBehaviorWait(page: Page) {
+    await page.evaluate(() => {
+      const testWindow = window as any
+      testWindow.__pagesPlusScrollSettled = false
+      testWindow.useNuxtApp().hooks.hookOnce('page:loading:end', () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            testWindow.__pagesPlusScrollSettled = true
+          })
+        })
+      })
+    })
+  }
+
+  async function waitForScrollBehavior(page: Page) {
+    await page.waitForFunction(() => (window as any).__pagesPlusScrollSettled)
+  }
+
   it('keeps the index background view on the default layout while the info modal is open', async () => {
     const page = await createPage('/')
 
@@ -38,8 +56,15 @@ describe('modal-layout fixture', async () => {
     // a background view rewrapped into another layout would lose the attribute
     await page.evaluate(() => document.querySelector('[data-layout="default"]')?.setAttribute('data-live', '1'))
 
+    await page.getByRole('link', { name: 'Open info modal' }).scrollIntoViewIfNeeded()
+    const backgroundScroll = await page.evaluate(() => window.scrollY)
+    expect(backgroundScroll).toBeGreaterThan(0)
+
     // clicking "Open info modal" changes the url to /info and pops up the modal
+    await armScrollBehaviorWait(page)
     await openInfoModal(page)
+    await waitForScrollBehavior(page)
+    expect(await page.evaluate(() => window.scrollY)).toBe(backgroundScroll)
 
     // the url is /info, whose page meta declares the 'blue' layout, but the background
     // view (index) must keep the default layout: PlusModalApp uses the
@@ -50,9 +75,12 @@ describe('modal-layout fixture', async () => {
     await expectModalAppSlot(page, '/', 'default')
 
     // closing the modal returns to / with the same retained default layout
+    await armScrollBehaviorWait(page)
     await page.locator('.modal-wrapper').getByRole('button', { name: 'Close' }).click()
     await page.waitForURL(url('/'))
     await page.waitForFunction(() => !document.querySelector('.modal-wrapper'))
+    await waitForScrollBehavior(page)
+    expect(await page.evaluate(() => window.scrollY)).toBe(backgroundScroll)
     expect(await layout(page, 'blue').count()).toBe(0)
     expect(await layout(page, 'default').getAttribute('data-live')).toBe('1')
 
@@ -101,10 +129,16 @@ describe('modal-layout fixture', async () => {
     const page = await createPage('/')
     await page.getByRole('heading', { name: 'index page' }).waitFor()
 
+    await page.getByRole('link', { name: 'Go to info page' }).scrollIntoViewIfNeeded()
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+
     // an ordinary NuxtLink navigation swaps both the view and its layout
+    await armScrollBehaviorWait(page)
     await page.getByRole('link', { name: 'Go to info page' }).click()
     await page.waitForURL(url('/info'))
     await page.getByRole('heading', { name: 'info page' }).waitFor()
+    await waitForScrollBehavior(page)
+    expect(await page.evaluate(() => window.scrollY)).toBe(0)
     expect(await layout(page, 'blue').count()).toBe(1)
     expect(await layout(page, 'default').count()).toBe(0)
     await expectModalAppSlot(page, '/info', 'blue')

@@ -10,6 +10,8 @@ definePageMeta({
   <div>
     <h1>index page</h1>
 
+    <div data-scroll-spacer style="height: 200vh" />
+
     <PlusModalLink to="/info">
       Open info modal
     </PlusModalLink>

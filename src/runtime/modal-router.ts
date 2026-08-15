@@ -5,6 +5,7 @@ import type { ComputedRef } from '#imports'
 import { loadRouteLocation, useRouter } from 'vue-router'
 import { defineNuxtPlugin } from '#app'
 import { computed, shallowRef } from '#imports'
+import { createModalScrollBehavior } from './modal-scroll'
 
 interface ModalPushRecord {
   id: string
@@ -81,6 +82,18 @@ export default defineNuxtPlugin(async (nuxt) => {
     // present in history.state override the cached values
     if (history.state?.backgroundView) {
       history.replaceState({ ...history.state, id: undefined, backgroundView: undefined }, '')
+    }
+
+    // Nuxt installs its final scroll behavior during app:created. Wrap it after
+    // mounting so modal entries preserve the background instead of running the
+    // standalone page's scroll behavior. At scroll time, history.state already
+    // belongs to the destination entry, so plain navigations remain unchanged.
+    const scrollBehavior = router.options.scrollBehavior
+    if (scrollBehavior) {
+      router.options.scrollBehavior = createModalScrollBehavior(
+        scrollBehavior,
+        () => !!history.state?.backgroundView,
+      )
     }
 
     // load background view if background view not loaded (when navigate from browser)
