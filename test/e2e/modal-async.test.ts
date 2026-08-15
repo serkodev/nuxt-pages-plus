@@ -3,9 +3,9 @@ import { fileURLToPath } from 'node:url'
 import { createPage, setup, url, waitForHydration } from '@nuxt/test-utils/e2e'
 import { describe, expect, it } from 'vitest'
 
-// the fixture's standalone gallery page (pages/gallery/[id].vue) awaits a
-// useFetch of this duration, so post-hydration navigations towards it keep the
-// previous page (and its modal outlet) mounted while the suspense is pending
+// the fixture's standalone gallery page (pages/gallery/[id].vue) awaits this
+// long in its setup, so navigations towards it keep the previous page (and its
+// modal outlet) mounted while the suspense is pending
 const ASYNC_DELAY = 800
 
 describe('modal-async fixture', async () => {
@@ -86,9 +86,10 @@ describe('modal-async fixture', async () => {
     await page.close()
   }, 120_000)
 
-  // same flow as the primary test above — after refresh + back,
-  // purgeCachedData has dropped the cached entries, so the forward navigation
-  // re-fetches and the suspense stays pending for the round-trip duration
+  // same scenario as above, but the standalone page awaits real data fetches
+  // instead of a timer — after refresh + back, purgeCachedData has dropped the
+  // cached entries, so forward re-fetches and the suspense stays pending for
+  // the round-trip duration
   async function expectNoFlashOnForwardToRefreshedEntry(page: Page, name: string, pendingMs: number) {
     await page.getByRole('link', { name: `Open ${name} 1` }).click()
     await page.waitForURL(url(`/${name}/1`))
@@ -115,6 +116,14 @@ describe('modal-async fixture', async () => {
     expect(await modal(page).count()).toBe(0)
     await expectNoModalFlash(page)
   }
+
+  it('does not flash the modal when the refreshed entry awaits a single useFetch', async () => {
+    // sync-setup modal: renders as soon as the parallel router syncs, so
+    // without the isOpen gate this flashes for the whole fetch round trip
+    const page = await createPage('/')
+    await expectNoFlashOnForwardToRefreshedEntry(page, 'fetch-one', 300)
+    await page.close()
+  }, 120_000)
 
   it('does not flash the modal when the refreshed entry awaits two sequential useFetch', async () => {
     // async-setup modal sharing the page's first fetch (deduped by key) — the

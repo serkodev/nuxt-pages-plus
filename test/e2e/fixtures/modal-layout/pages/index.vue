@@ -19,17 +19,5 @@ definePageMeta({
     <NuxtLink to="/info">
       Go to info page
     </NuxtLink>
-
-    <PlusModalLink to="/slow">
-      Open slow modal
-    </PlusModalLink>
-
-    <NuxtLink to="/slow">
-      Go to slow page
-    </NuxtLink>
-
-    <NuxtLink to="/cached-fetch">
-      Go to cached-fetch page
-    </NuxtLink>
   </div>
 </template>

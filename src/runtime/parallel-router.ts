@@ -39,81 +39,8 @@ function toReactive<T extends object>(objectRef: Ref<T>): T {
   return reactive(proxy) as T
 }
 
-export default defineNuxtPlugin(async (nuxt) => {
+export default defineNuxtPlugin(async () => {
   const router = useRouter()
-
-  // Navigating during hydration patches a half-hydrated tree, freezing the old page on
-  // screen (or rolling the navigation back) — hold popstate navigations until it settles.
-  if (import.meta.client) {
-    // `app:beforeMount` fires after the boot `router.replace` in the `app:created` hook
-    // below, so boot navigations can never be held
-    nuxt.hooks.hookOnce('app:beforeMount', () => {
-      // without server rendering there is nothing to hydrate
-      if (!nuxt.payload.serverRendered || !nuxt.isHydrating)
-        return
-
-      // the pending popstate destination — matched by target path so an aborted
-      // popstate (or a concurrent programmatic push) cannot leak the hold
-      let popstateTarget: string | undefined
-
-      // a redirected popstate is re-issued as a programmatic navigation to another
-      // path; `redirectedFrom` still carries the original destination, so match it too
-      function matchesPopstate(to: { fullPath: string, redirectedFrom?: { fullPath: string } }) {
-        return popstateTarget !== undefined
-          && (to.fullPath === popstateTarget || to.redirectedFrom?.fullPath === popstateTarget)
-      }
-
-      const stops: Array<() => void> = []
-
-      const hydrated = new Promise<void>((resolve) => {
-        function done() {
-          popstateTarget = undefined
-          for (const stop of stops) {
-            stop()
-          }
-
-          resolve()
-        }
-        stops.push(
-          nuxt.hooks.hookOnce('app:suspense:resolve', done),
-          // hydration may never settle after a fatal error — release the hold
-          // rather than leaving the back/forward buttons dead
-          nuxt.hooks.hookOnce('app:error', done),
-        )
-      })
-
-      stops.push(
-        // `history.listen` fires synchronously inside vue-router's popstate handler,
-        // before the navigation's guards — a window `popstate` listener would be too late
-        router.options.history.listen((to) => {
-          popstateTarget = to
-        }),
-        // clear the mark once a matching navigation finishes or fails, so an aborted
-        // popstate cannot leak its hold onto a later navigation
-        router.afterEach((to) => {
-          if (matchesPopstate(to)) {
-            popstateTarget = undefined
-          }
-        }),
-        router.onError((_error, to) => {
-          if (matchesPopstate(to)) {
-            popstateTarget = undefined
-          }
-        }),
-        // only popstate navigations are held: a programmatic one awaited inside a
-        // hydrating setup (e.g. `await navigateTo()`) would deadlock its own suspense.
-        // (`_processingMiddleware` stays set while held, so a concurrent `navigateTo()`
-        // is a no-op — the held back/forward press is the user's latest intent and wins)
-        router.beforeEach(async (to) => {
-          if (!matchesPopstate(to))
-            return
-
-          popstateTarget = undefined
-          await hydrated
-        }),
-      )
-    })
-  }
 
   const { separator, parallelPages: pagesOptions } = pagesPlusOptions as unknown as PagesPlusOptions
 
