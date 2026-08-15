@@ -14,6 +14,11 @@ describe('modal-layout fixture', async () => {
     return page.locator(`[data-layout="${name}"]`)
   }
 
+  async function expectModalAppSlot(page: Page, route: string, layoutName: 'default' | 'blue') {
+    expect((await page.locator('#modal-app-slot-route').textContent())?.trim()).toBe(route)
+    expect((await page.locator('#modal-app-slot-layout').textContent())?.trim()).toBe(layoutName)
+  }
+
   async function openInfoModal(page: Page) {
     await page.getByRole('link', { name: 'Open info modal' }).click()
     await page.waitForURL(url('/info'))
@@ -27,6 +32,7 @@ describe('modal-layout fixture', async () => {
     await page.getByRole('heading', { name: 'index page' }).waitFor()
     expect(await layout(page, 'default').count()).toBe(1)
     expect(await layout(page, 'blue').count()).toBe(0)
+    await expectModalAppSlot(page, '/', 'default')
 
     // stamp the live layout element so retention (no re-layout) can be asserted —
     // a background view rewrapped into another layout would lose the attribute
@@ -36,11 +42,12 @@ describe('modal-layout fixture', async () => {
     await openInfoModal(page)
 
     // the url is /info, whose page meta declares the 'blue' layout, but the background
-    // view (index) must keep the default layout: <NuxtLayout :name="layout"> receives
-    // the background route's layout from the PlusModalNuxtPage slot
+    // view (index) must keep the default layout: PlusModalApp uses the
+    // background route and its layout while the modal is open
     expect(await page.getByRole('heading', { name: 'index page' }).isVisible()).toBe(true)
     expect(await layout(page, 'blue').count()).toBe(0)
     expect(await layout(page, 'default').getAttribute('data-live')).toBe('1')
+    await expectModalAppSlot(page, '/', 'default')
 
     // closing the modal returns to / with the same retained default layout
     await page.locator('.modal-wrapper').getByRole('button', { name: 'Close' }).click()
@@ -71,6 +78,7 @@ describe('modal-layout fixture', async () => {
     expect(await layout(page, 'default').count()).toBe(0)
     expect(await page.locator('.modal-wrapper').count()).toBe(0)
     expect(await page.getByRole('heading', { name: 'index page' }).count()).toBe(0)
+    await expectModalAppSlot(page, '/info', 'blue')
 
     await page.close()
   }, 120_000)
@@ -84,6 +92,7 @@ describe('modal-layout fixture', async () => {
     expect(await layout(page, 'blue').count()).toBe(1)
     expect(await layout(page, 'default').count()).toBe(0)
     expect(await page.locator('.modal-wrapper').count()).toBe(0)
+    await expectModalAppSlot(page, '/info', 'blue')
 
     await page.close()
   }, 120_000)
@@ -98,6 +107,7 @@ describe('modal-layout fixture', async () => {
     await page.getByRole('heading', { name: 'info page' }).waitFor()
     expect(await layout(page, 'blue').count()).toBe(1)
     expect(await layout(page, 'default').count()).toBe(0)
+    await expectModalAppSlot(page, '/info', 'blue')
 
     await page.close()
   }, 120_000)

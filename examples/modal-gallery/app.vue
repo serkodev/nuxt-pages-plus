@@ -1,3 +1,3 @@
 <template>
-  <PlusModalNuxtPage />
+  <PlusModalApp />
 </template>

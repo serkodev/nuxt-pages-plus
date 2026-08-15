@@ -24,8 +24,8 @@ export interface ModalRouter {
   isOpen: ComputedRef<boolean>
 
   /**
-   * returns the layout of the modal route view when the modal is opened
-   * must pass to NuxtLayout to prevent using wrong layout from parallel routes
+   * the background route's layout while a modal is open,
+   * or the current route's layout otherwise
    */
   layout: ComputedRef<PageMeta['layout']>
 

@@ -39,6 +39,15 @@ describe('modal-basic fixture', async () => {
     await page.waitForFunction(() => !document.querySelector('.modal-wrapper'))
   }
 
+  it('keeps the PlusModalNuxtPage fallback page-only for backward compatibility', async () => {
+    const page = await createPage('/')
+
+    await page.getByRole('heading', { name: 'index page' }).waitFor()
+    expect(await page.locator('[data-layout="legacy"]').count()).toBe(0)
+
+    await page.close()
+  }, 120_000)
+
   it('opens the info modal and retains the index background view', async () => {
     const page = await createPage('/')
 
