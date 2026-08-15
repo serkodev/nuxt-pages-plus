@@ -111,7 +111,7 @@ export default defineNuxtPlugin(async (nuxt) => {
   const isOpen = computed(() => !!historyState.value?.backgroundView)
 
   const layout = computed<PageMeta['layout']>(() => {
-    return (route.value ? route.value.meta.layout : router.currentRoute.value.meta.layout) || false
+    return (route.value ? route.value.meta.layout : router.currentRoute.value.meta.layout)
   })
 
   async function backgroundNavigate(
