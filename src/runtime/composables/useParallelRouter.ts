@@ -31,12 +31,9 @@ export function useParentRouter(): Router {
 }
 
 export function useParentRoute(): RouteLocationNormalizedLoadedGeneric {
-  // a <PlusParallelPage> provides the route it is rendering; prefer that so a page
-  // rendered with an explicit `route` prop reads ITS params, not the parallel
-  // router's shared current (top) route
-  const parallelRoute = inject(ParallelRouteSymbol, undefined)
-  if (parallelRoute)
-    return toReactive(parallelRoute as Ref<RouteLocationNormalizedLoadedGeneric>)
+  const context = inject(ParallelRouteSymbol, undefined)
+  if (context?.isOverride.value)
+    return toReactive(context.route as Ref<RouteLocationNormalizedLoadedGeneric>)
   return useParallelRoute() ?? useRoute()
 }
 

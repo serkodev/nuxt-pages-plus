@@ -4,9 +4,10 @@ import type { MaybeRef, Ref } from '#imports'
 
 export const ParallelRouterSymbol = Symbol('ParallelRouterSymbol') as InjectionKey<MaybeRef<string> | undefined>
 
-// the route ref a `<PlusParallelPage>` is currently rendering (its `route` prop,
-// or the parallel router's current route) — provided so descendants read it via
-// `useParentRoute()` instead of the parallel router's shared current (top) route.
-export const ParallelRouteSymbol = Symbol('ParallelRouteSymbol') as InjectionKey<Ref<RouteLocationNormalizedLoadedGeneric | undefined> | undefined>
+// Each outlet supplies its own context, masking any outer route override.
+export const ParallelRouteSymbol = Symbol('ParallelRouteSymbol') as InjectionKey<{
+  route: Ref<RouteLocationNormalizedLoadedGeneric | undefined>
+  isOverride: Ref<boolean>
+} | undefined>
 
 export const ParallelRouteNotFoundSymbol = Symbol('ParallelRouteNotFoundSymbol')

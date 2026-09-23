@@ -41,10 +41,15 @@ provide(ParallelRouterSymbol, routerName)
 
 const router = computed(() => useParallelRouter(routerName.value))
 const renderRoute = computed(() => props.route ?? router.value?.currentRoute.value)
+const hasRouteOverride = computed(() => props.route != null)
 
-// expose the route this page is rendering so descendants read it via
-// `useParentRoute()` instead of the parallel router's shared current (top) route
-provide(ParallelRouteSymbol, renderRoute)
+// Consumers capture their route object in setup, so a context change must rerun setup.
+const contextKey = computed(() => hasRouteOverride.value ? 'explicit' : 'shared')
+
+provide(ParallelRouteSymbol, {
+  route: renderRoute,
+  isOverride: hasRouteOverride,
+})
 
 const routerKey = experimental?.parallelPageMetaKey
   ? computed(() => {
@@ -70,14 +75,17 @@ const hide = computed(() => {
 </script>
 
 <template>
-  <div v-if="fallbackSlot">
+  <div v-if="fallbackSlot" :key="contextKey">
     <component :is="fallbackSlot" />
   </div>
   <RouterView
     v-else-if="router && !hide"
+    v-slot="{ Component }"
     :key="routerKey"
     :name="routerViewName"
     :route="renderRoute"
     v-bind="$attrs"
-  />
+  >
+    <component :is="Component" :key="contextKey" />
+  </RouterView>
 </template>
