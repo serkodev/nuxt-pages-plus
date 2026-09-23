@@ -4,7 +4,7 @@ import type { PagesPlusOptions } from '../types'
 import { viewDepthKey } from 'vue-router'
 import pagesPlusOptions from '#build/nuxt-pages-plus-options.mjs'
 import { computed, inject, provide, unref, useParallelRouter } from '#imports'
-import { ParallelRouterSymbol } from '../symbols'
+import { ParallelRouterSymbol, ParallelRouteSymbol } from '../symbols'
 
 const props = defineProps<{
   // Unique name of the parallel router
@@ -41,6 +41,10 @@ provide(ParallelRouterSymbol, routerName)
 
 const router = computed(() => useParallelRouter(routerName.value))
 const renderRoute = computed(() => props.route ?? router.value?.currentRoute.value)
+
+// expose the route this page is rendering so descendants read it via
+// `useParentRoute()` instead of the parallel router's shared current (top) route
+provide(ParallelRouteSymbol, renderRoute)
 
 const routerKey = experimental?.parallelPageMetaKey
   ? computed(() => {
