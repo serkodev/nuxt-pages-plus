@@ -2,24 +2,9 @@ import type { RouteLocationNormalizedLoaded, RouteLocationNormalizedLoadedGeneri
 import type { Ref } from '#imports'
 import type { ParallelRouter } from '../parallel-router'
 import { useNuxtApp, useRoute, useRouter } from '#app'
-import { inject, reactive, toRef, unref } from '#imports'
+import { inject, toRef, unref } from '#imports'
 import { ParallelRouterSymbol, ParallelRouteSymbol } from '../symbols'
-
-// reactive object that always reflects the ref's current value, so a parallel
-// route can be consumed like `useRoute()` without unwrapping `.value`
-// (equivalent to `toReactive` from `@vueuse/core`, inlined to avoid the dependency;
-// mirrors the same helper in parallel-router.ts)
-function toReactive<T extends object>(objectRef: Ref<T>): T {
-  const proxy = new Proxy({} as T, {
-    get: (_, p, receiver) => Reflect.get(objectRef.value, p, receiver),
-    set: (_, p, value) => Reflect.set(objectRef.value, p, value),
-    deleteProperty: (_, p) => Reflect.deleteProperty(objectRef.value, p),
-    has: (_, p) => Reflect.has(objectRef.value, p),
-    ownKeys: () => Object.keys(objectRef.value),
-    getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }),
-  })
-  return reactive(proxy) as T
-}
+import { toReactive } from '../to-reactive'
 
 export function useParentRouterName(): Ref<string | undefined> {
   const symbol = inject(ParallelRouterSymbol, undefined)
