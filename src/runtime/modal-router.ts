@@ -11,6 +11,7 @@ interface ModalPushRecord {
   id: string
   backgroundView: string
   modalStacks?: number[]
+  modalStackPaths?: string[]
 }
 
 export interface ModalRouter {
@@ -37,6 +38,13 @@ export interface ModalRouter {
   stacks: ComputedRef<number[] | undefined>
 
   /**
+   * the full paths of the opened modal view, one per stack group (top last),
+   * for the active history entry — parallel to `stacks`. `undefined` when no
+   * modal is open.
+   */
+  stackPaths: ComputedRef<string[] | undefined>
+
+  /**
    * Close the modal
    * @param allOpened whether to close all opened modals
    */
@@ -60,6 +68,12 @@ export interface ModalRouter {
 
 const DEBUG = false
 
+// Keep the top entry of a stack-path list in sync when navigating within the
+// current stack group (`push` / `replace`); seed the list when it is empty.
+function replaceStackTop(paths: string[] | undefined, path: string): string[] {
+  return paths?.length ? [...paths.slice(0, -1), path] : [path]
+}
+
 export default defineNuxtPlugin(async (nuxt) => {
   const router = useRouter()
 
@@ -71,6 +85,12 @@ export default defineNuxtPlugin(async (nuxt) => {
     return historyState.value.modalStacks
   })
 
+  const stackPaths = computed(() => {
+    if (!historyState.value?.backgroundView)
+      return
+    return historyState.value.modalStackPaths
+  })
+
   // history is client side only, only hook after app mounted to prevent SSR hydration mismatch
   nuxt.hook('app:mounted', () => {
     // a refreshed page renders as a plain full page, but the modal state persisted
@@ -80,7 +100,13 @@ export default defineNuxtPlugin(async (nuxt) => {
     // (stale) cached state with history.state on the next push, and only keys
     // present in history.state override the cached values
     if (history.state?.backgroundView) {
-      history.replaceState({ ...history.state, id: undefined, backgroundView: undefined, modalStacks: undefined }, '')
+      history.replaceState({
+        ...history.state,
+        id: undefined,
+        backgroundView: undefined,
+        modalStacks: undefined,
+        modalStackPaths: undefined,
+      }, '')
     }
 
     // Nuxt installs its final scroll behavior during app:created. Wrap it after
@@ -101,14 +127,28 @@ export default defineNuxtPlugin(async (nuxt) => {
         await loadRouteLocation(router.resolve(history.state.backgroundView))
     })
 
-    router.afterEach((_to, _from, failure) => {
+    router.afterEach((to, _from, failure) => {
       // an aborted navigation commits nothing, but at this point history.state
       // may still belong to the reverted target entry (a guard-aborted popstate
       // is restored asynchronously with vue-router's listener paused, so no
       // later navigation re-syncs it) — snapshotting it would desync the modal
       // state from the entry the browser actually stays on
-      if (!failure)
-        historyState.value = history.state
+      if (failure)
+        return
+
+      // The top modal path is stamped from the *requested* target in
+      // `backgroundNavigate`, but a navigation can still settle elsewhere: a
+      // redirect rewrites the destination, and a bare `router.replace()` (one
+      // that never went through `backgroundNavigate`) leaves vue-router's merged
+      // state carrying the previous path. Re-sync the top entry to the route we
+      // actually landed on so `stackPaths` stays parallel to the live route.
+      const state = history.state
+      if (state?.backgroundView && state.modalStackPaths?.length
+        && state.modalStackPaths.at(-1) !== to.fullPath) {
+        history.replaceState({ ...state, modalStackPaths: replaceStackTop(state.modalStackPaths, to.fullPath) }, '')
+      }
+
+      historyState.value = history.state
     })
   })
 
@@ -140,9 +180,14 @@ export default defineNuxtPlugin(async (nuxt) => {
       modalStacks.push(0)
     }
 
-    // Keep sizes on each history entry so older modal groups survive opening
-    // a new stack or reloading a later entry.
-    const state = { id: `plus-${Date.now()}`, backgroundView, modalStacks } satisfies ModalPushRecord
+    const toPath = router.resolve(to).fullPath
+    const modalStackPaths = action === 'push_open'
+      ? [...(stackPaths.value ?? []), toPath]
+      : replaceStackTop(stackPaths.value, toPath)
+
+    // Keep sizes and paths on each history entry so older modal groups survive
+    // opening a new stack or reloading a later entry.
+    const state = { id: `plus-${Date.now()}`, backgroundView, modalStacks, modalStackPaths } satisfies ModalPushRecord
 
     const _to = {
       ...(typeof to === 'string' ? router.resolve(to) : to),
@@ -193,6 +238,7 @@ export default defineNuxtPlugin(async (nuxt) => {
         layout,
         backgroundRoute: route,
         stacks,
+        stackPaths,
         close,
         push,
         replace,
