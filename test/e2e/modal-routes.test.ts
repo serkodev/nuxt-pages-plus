@@ -176,6 +176,35 @@ describe('modal-routes fixture', async () => {
     await page.close()
   }, 120_000)
 
+  it('keeps a redirected stack path when another stack opens over it', async () => {
+    const page = await createPage('/')
+    await openGalleryModal(page)
+
+    // open a new stack at /gallery/99, which the middleware redirects to /gallery/6
+    await modal(page).getByRole('link', { name: 'Open redirecting stack' }).click()
+    await page.waitForURL(url('/gallery/6'))
+    await expectGalleryModal(page, 6)
+    await expectStacks(page, [1, 1], ['/gallery/1', '/gallery/6'])
+
+    // the settled /gallery/6 must be stored as the lower group's path
+    await modal(page).getByRole('link', { name: 'Open next stack' }).click()
+    await page.waitForURL(url('/gallery/7'))
+    await expectGalleryModal(page, 7)
+    await expectStacks(page, [1, 1, 1], ['/gallery/1', '/gallery/6', '/gallery/7'])
+
+    await page.goBack()
+    await page.waitForURL(url('/gallery/6'))
+    await expectGalleryModal(page, 6)
+    await expectStacks(page, [1, 1], ['/gallery/1', '/gallery/6'])
+
+    await page.goForward()
+    await page.waitForURL(url('/gallery/7'))
+    await expectGalleryModal(page, 7)
+    await expectStacks(page, [1, 1, 1], ['/gallery/1', '/gallery/6', '/gallery/7'])
+
+    await page.close()
+  }, 120_000)
+
   it('syncs stackPaths after a bare router.replace() outside the modal router', async () => {
     const page = await createPage('/')
     await openGalleryModal(page)

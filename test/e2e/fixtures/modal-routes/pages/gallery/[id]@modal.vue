@@ -39,6 +39,10 @@ function bareReplace() {
       Open next stack
     </PlusModalLink>
 
+    <PlusModalLink open to="/gallery/99">
+      Open redirecting stack
+    </PlusModalLink>
+
     <PlusModalLink replace to="/gallery/9">
       Replace with last
     </PlusModalLink>
