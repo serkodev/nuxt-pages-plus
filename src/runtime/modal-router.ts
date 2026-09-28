@@ -42,7 +42,7 @@ export interface ModalRouter {
   /**
    * the full paths of the opened modal view, one per stack group (top last),
    * for the active history entry — parallel to `stacks`. `undefined` when no
-   * modal is open.
+   * modal is open, or when the entry was created before paths were tracked.
    */
   stackPaths: ComputedRef<string[] | undefined>
 
@@ -84,7 +84,12 @@ export default defineNuxtPlugin(async (nuxt) => {
   const stackPaths = computed(() => {
     if (!stacks.value)
       return
-    return [...(historyState.value?.modalLowerStackPaths ?? []), router.currentRoute.value.fullPath]
+    const lowerPaths = historyState.value?.modalLowerStackPaths ?? []
+    // entries written before paths were tracked cannot recover the lower
+    // groups' paths, so report them as unknown instead of misaligned
+    if (lowerPaths.length !== stacks.value.length - 1)
+      return
+    return [...lowerPaths, router.currentRoute.value.fullPath]
   })
 
   // history is client side only, only hook after app mounted to prevent SSR hydration mismatch

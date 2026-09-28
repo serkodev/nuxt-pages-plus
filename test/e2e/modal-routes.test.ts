@@ -192,6 +192,41 @@ describe('modal-routes fixture', async () => {
     await page.close()
   }, 120_000)
 
+  it('reports stackPaths as unknown for entries without tracked paths', async () => {
+    const page = await createPage('/')
+    await openGalleryModal(page)
+
+    await modal(page).getByRole('link', { name: 'Open next stack' }).click()
+    await page.waitForURL(url('/gallery/2'))
+    await expectGalleryModal(page, 2)
+    await expectStacks(page, [1, 1], ['/gallery/1', '/gallery/2'])
+
+    // simulate an entry written before paths were tracked (only stack sizes)
+    await page.evaluate(() => {
+      const state = { ...window.history.state }
+      delete state.modalLowerStackPaths
+      window.history.replaceState(state, '')
+    })
+
+    // re-enter the entry so its state is read back from history
+    await page.goBack()
+    await page.waitForURL(url('/gallery/1'))
+    await expectStacks(page, [1], ['/gallery/1'])
+
+    await page.goForward()
+    await page.waitForURL(url('/gallery/2'))
+    await expectGalleryModal(page, 2)
+    await expectStacks(page, [1, 1], null)
+
+    // a push cannot recover the lower group's path, so it stays unknown
+    await modal(page).getByRole('button', { name: 'Push next' }).click()
+    await page.waitForURL(url('/gallery/3'))
+    await expectGalleryModal(page, 3)
+    await expectStacks(page, [1, 2], null)
+
+    await page.close()
+  }, 120_000)
+
   it('restores nested stack sizes after a refresh for close and close-all', async () => {
     const page = await createPage('/')
     await openGalleryModal(page)
