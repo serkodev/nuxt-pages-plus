@@ -285,7 +285,7 @@ describe('modal-routes fixture', async () => {
     expect(state.backgroundView).toBeUndefined()
     expect(state.id).toBeUndefined()
     expect(state.modalStacks).toBeUndefined()
-    expect(state.modalStackPaths).toBeUndefined()
+    expect(state.modalLowerStackPaths).toBeUndefined()
     expect(state.current).toBe('/gallery/1')
     expect(typeof state.position).toBe('number')
 

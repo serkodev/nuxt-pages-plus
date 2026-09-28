@@ -7,14 +7,13 @@ function pushNext() {
 }
 
 // pushes to a path a global middleware redirects to /gallery/6, so the settled
-// route differs from the requested one (exercises stackPaths' redirect sync)
+// route differs from the requested one
 function pushRedirecting() {
   useModalRouter().push('/gallery/99')
 }
 
 // a bare vue-router replace that bypasses $modalRouter: the merged history state
-// keeps the modal open while the route changes underneath, so the stamped path
-// goes stale (exercises stackPaths' sync for a replace outside backgroundNavigate)
+// keeps the modal open while the route changes underneath
 function bareReplace() {
   router.replace('/gallery/8')
 }

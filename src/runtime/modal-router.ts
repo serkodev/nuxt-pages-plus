@@ -11,7 +11,9 @@ interface ModalPushRecord {
   id: string
   backgroundView: string
   modalStacks?: number[]
-  modalStackPaths?: string[]
+  // paths of the stack groups below the top one; the top group's path is
+  // always the current route, so it is derived instead of stored
+  modalLowerStackPaths?: string[]
 }
 
 export interface ModalRouter {
@@ -68,12 +70,6 @@ export interface ModalRouter {
 
 const DEBUG = false
 
-// Keep the top entry of a stack-path list in sync when navigating within the
-// current stack group (`push` / `replace`); seed the list when it is empty.
-function replaceStackTop(paths: string[] | undefined, path: string): string[] {
-  return paths?.length ? [...paths.slice(0, -1), path] : [path]
-}
-
 export default defineNuxtPlugin(async (nuxt) => {
   const router = useRouter()
 
@@ -86,9 +82,9 @@ export default defineNuxtPlugin(async (nuxt) => {
   })
 
   const stackPaths = computed(() => {
-    if (!historyState.value?.backgroundView)
+    if (!stacks.value)
       return
-    return historyState.value.modalStackPaths
+    return [...(historyState.value?.modalLowerStackPaths ?? []), router.currentRoute.value.fullPath]
   })
 
   // history is client side only, only hook after app mounted to prevent SSR hydration mismatch
@@ -105,7 +101,7 @@ export default defineNuxtPlugin(async (nuxt) => {
         id: undefined,
         backgroundView: undefined,
         modalStacks: undefined,
-        modalStackPaths: undefined,
+        modalLowerStackPaths: undefined,
       }, '')
     }
 
@@ -127,28 +123,14 @@ export default defineNuxtPlugin(async (nuxt) => {
         await loadRouteLocation(router.resolve(history.state.backgroundView))
     })
 
-    router.afterEach((to, _from, failure) => {
+    router.afterEach((_to, _from, failure) => {
       // an aborted navigation commits nothing, but at this point history.state
       // may still belong to the reverted target entry (a guard-aborted popstate
       // is restored asynchronously with vue-router's listener paused, so no
       // later navigation re-syncs it) — snapshotting it would desync the modal
       // state from the entry the browser actually stays on
-      if (failure)
-        return
-
-      // The top modal path is stamped from the *requested* target in
-      // `backgroundNavigate`, but a navigation can still settle elsewhere: a
-      // redirect rewrites the destination, and a bare `router.replace()` (one
-      // that never went through `backgroundNavigate`) leaves vue-router's merged
-      // state carrying the previous path. Re-sync the top entry to the route we
-      // actually landed on so `stackPaths` stays parallel to the live route.
-      const state = history.state
-      if (state?.backgroundView && state.modalStackPaths?.length
-        && state.modalStackPaths.at(-1) !== to.fullPath) {
-        history.replaceState({ ...state, modalStackPaths: replaceStackTop(state.modalStackPaths, to.fullPath) }, '')
-      }
-
-      historyState.value = history.state
+      if (!failure)
+        historyState.value = history.state
     })
   })
 
@@ -180,14 +162,14 @@ export default defineNuxtPlugin(async (nuxt) => {
       modalStacks.push(0)
     }
 
-    const toPath = router.resolve(to).fullPath
-    const modalStackPaths = action === 'push_open'
-      ? [...(stackPaths.value ?? []), toPath]
-      : replaceStackTop(stackPaths.value, toPath)
+    // opening a new stack moves the current top path below it; the new top is
+    // derived from wherever the navigation settles (redirects included)
+    const paths = stackPaths.value ?? []
+    const modalLowerStackPaths = action === 'push_open' ? [...paths] : paths.slice(0, -1)
 
     // Keep sizes and paths on each history entry so older modal groups survive
     // opening a new stack or reloading a later entry.
-    const state = { id: `plus-${Date.now()}`, backgroundView, modalStacks, modalStackPaths } satisfies ModalPushRecord
+    const state = { id: `plus-${Date.now()}`, backgroundView, modalStacks, modalLowerStackPaths } satisfies ModalPushRecord
 
     const _to = {
       ...(typeof to === 'string' ? router.resolve(to) : to),
