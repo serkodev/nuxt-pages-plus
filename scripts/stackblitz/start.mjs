@@ -22,6 +22,10 @@ async function run(command, args) {
 }
 
 async function main() {
+  const example = process.argv[2] || 'modal-gallery'
+  if (!['parallel-news', 'modal-gallery'].includes(example))
+    throw new Error(`Unknown example: ${example}. Choose parallel-news or modal-gallery.`)
+
   const modules = new URL('../../node_modules', import.meta.url)
   const target = 'scripts/stackblitz/node_modules'
   const existing = await lstat(modules).catch((error) => {
@@ -39,8 +43,8 @@ async function main() {
   const nuxt = 'scripts/stackblitz/node_modules/@nuxt/cli/bin/nuxi.mjs'
   await run(process.execPath, ['scripts/stackblitz/node_modules/@nuxt/module-builder/dist/cli.mjs', 'prepare'])
   await run(process.execPath, [nuxt, 'prepare', 'examples/base'])
-  await run(process.execPath, [nuxt, 'build', 'examples/modal-gallery'])
-  await run(process.execPath, ['examples/modal-gallery/.output/server/index.mjs'])
+  await run(process.execPath, [nuxt, 'build', `examples/${example}`])
+  await run(process.execPath, [`examples/${example}/.output/server/index.mjs`])
 }
 
 main().catch((error) => {

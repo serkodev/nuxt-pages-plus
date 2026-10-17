@@ -26,6 +26,8 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare examples/base",
     "play": "nuxi dev playground",
     "play:build": "nuxi build playground",
+    "stackblitz:parallel-news": "node scripts/stackblitz/start.mjs parallel-news",
+    "stackblitz:modal-gallery": "node scripts/stackblitz/start.mjs modal-gallery",
     "docs:dev": "pnpm --dir docs dev",
     "docs:build": "pnpm --dir docs build",
     "docs:deploy": "pnpm dev:prepare && pnpm docs:build",
