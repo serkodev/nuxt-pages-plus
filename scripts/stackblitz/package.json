@@ -1,0 +1,22 @@
+{
+  "name": "nuxt-pages-plus-modal-gallery-preview",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.123",
+    "@nuxt/kit": "4.5.2",
+    "@nuxt/module-builder": "1.0.3",
+    "@nuxt/ui": "4.10.0",
+    "@types/node": "^24.13.3",
+    "defu": "^6.1.7",
+    "nuxt": "4.5.2",
+    "rolldown": "1.2.4",
+    "typescript": "~5.9.3",
+    "ufo": "^1.6.4",
+    "vue-router": "^5.2.0",
+    "vue-tsc": "^3.3.9"
+  },
+  "overrides": {
+    "rolldown": "1.2.4"
+  }
+}
