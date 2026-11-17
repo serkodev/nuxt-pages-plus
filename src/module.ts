@@ -1,5 +1,5 @@
 import type { PagesPlusOptions } from './runtime/types'
-import { addComponentsDir, addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
+import { addComponentsDir, addImports, addPlugin, addTemplate, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import { restoreParallelPages } from './named-views'
 import { extractParallelRoutePath } from './runtime/utils'
 
@@ -27,7 +27,19 @@ export default defineNuxtModule<PagesPlusOptions>({
       getContents: () => `export default ${JSON.stringify(options)}`,
     })
 
-    addImportsDir(resolver.resolve('./runtime/composables'))
+    // Use addImports because imports.scan: false skips directories registered with addImportsDir.
+    // Add every new public composable to this list so it remains available without scanning.
+    addImports([
+      { name: 'useParentRouterName', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useParentRouter', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useParentRoute', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useParallelRouters', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useParallelRoutes', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useParallelRouter', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useParallelRoute', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'resolveParallelRoutersByPath', from: resolver.resolve('./runtime/composables/useParallelRouter') },
+      { name: 'useModalRouter', from: resolver.resolve('./runtime/composables/useModalRouter') },
+    ])
 
     addComponentsDir({ path: resolver.resolve('./runtime/components') })
 
